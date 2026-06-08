@@ -1,0 +1,59 @@
+{
+  "name": "stealth-ai",
+  "version": "1.0.0",
+  "description": "Stealth real-time AI interview assistant for macOS",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --mac --win"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "highlight.js": "^11.9.0",
+    "marked": "^12.0.0",
+    "node-fetch": "^2.7.0",
+    "undici": "^8.4.0"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.stealthai.app",
+    "productName": "StealthAI",
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.productivity",
+      "darkModeSupport": true,
+      "entitlements": "build/entitlements.mac.plist",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false
+    },
+    "dmg": {
+      "title": "StealthAI",
+      "artifactName": "StealthAI-mac-${version}.${ext}"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "StealthAI-win-${version}.exe"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer/**/*",
+      "node_modules/**/*"
+    ]
+  }
+}

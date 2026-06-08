@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <script>
+    async function run() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const mr = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+        mr.ondataavailable = (e) => {
+          console.log('Got data! Size:', e.data.size);
+          process.exit(0);
+        };
+        mr.start();
+        setTimeout(() => mr.stop(), 2000);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    run();
+  </script>
+</body>
+</html>

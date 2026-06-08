@@ -1,0 +1,393 @@
+
+[2026-06-08T09:29:18.566Z] transcribeAudio called. Base64 length: 107708
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:29:23.567Z] transcribeAudio called. Base64 length: 107760
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:29:28.569Z] transcribeAudio called. Base64 length: 107984
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:29:33.571Z] transcribeAudio called. Base64 length: 108008
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:29:38.573Z] transcribeAudio called. Base64 length: 107880
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:29:43.576Z] transcribeAudio called. Base64 length: 107720
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:29:48.578Z] transcribeAudio called. Base64 length: 107532
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:29:53.580Z] transcribeAudio called. Base64 length: 107644
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:29:58.585Z] transcribeAudio called. Base64 length: 107484
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:30:03.584Z] transcribeAudio called. Base64 length: 107680
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:30:08.587Z] transcribeAudio called. Base64 length: 107804
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:30:13.590Z] transcribeAudio called. Base64 length: 107648
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:30:18.594Z] transcribeAudio called. Base64 length: 107584
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:30:23.601Z] transcribeAudio called. Base64 length: 107696
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:30:28.600Z] transcribeAudio called. Base64 length: 107576
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:30:33.603Z] transcribeAudio called. Base64 length: 107704
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:30:38.605Z] transcribeAudio called. Base64 length: 107616
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:30:43.609Z] transcribeAudio called. Base64 length: 108120
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:30:48.612Z] transcribeAudio called. Base64 length: 107568
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:30:53.616Z] transcribeAudio called. Base64 length: 107592
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:31:40.174Z] transcribeAudio called. Base64 length: 107704
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:31:45.176Z] transcribeAudio called. Base64 length: 107544
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:31:50.179Z] transcribeAudio called. Base64 length: 107516
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:34:17.662Z] transcribeAudio called with model gemini-2.5-flash. Base64 length: 107236
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [503 ] This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:34:22.666Z] transcribeAudio called with model gemini-2.5-flash. Base64 length: 108124
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [503 ] This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:34:27.667Z] transcribeAudio called with model gemini-2.5-flash. Base64 length: 107536
+[SUCCESS] Received text: runsing
+
+[2026-06-08T09:34:32.670Z] transcribeAudio called with model gemini-2.5-flash. Base64 length: 107564
+[SUCCESS] Received text: [SILENCE]
+
+[2026-06-08T09:34:37.672Z] transcribeAudio called with model gemini-2.5-flash. Base64 length: 107716
+[SUCCESS] Received text: Hello sir myself Devraj Singh
+
+[2026-06-08T09:34:42.674Z] transcribeAudio called with model gemini-2.5-flash. Base64 length: 107576
+[SUCCESS] Received text: [SILENCE]
+
+[2026-06-08T09:34:47.678Z] transcribeAudio called with model gemini-2.5-flash. Base64 length: 107772
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 ] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-2.5-flash
+Please retry in 11.814658593s. [{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https://ai.google.dev/gemini-api/docs/rate-limits"}]},{"@type":"type.googleapis.com/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerMinutePerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-2.5-flash"},"quotaValue":"5"}]},{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"11s"}]
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:34:52.683Z] transcribeAudio called with model gemini-2.5-flash. Base64 length: 107720
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 ] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-2.5-flash
+Please retry in 7.037735867s. [{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https://ai.google.dev/gemini-api/docs/rate-limits"}]},{"@type":"type.googleapis.com/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerMinutePerProjectPerModel-FreeTier","quotaDimensions":{"location":"global","model":"gemini-2.5-flash"},"quotaValue":"5"}]},{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"7s"}]
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:34:57.681Z] transcribeAudio called with model gemini-2.5-flash. Base64 length: 107784
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [429 ] You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-2.5-flash
+Please retry in 1.814074628s. [{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Learn more about Gemini API quotas","url":"https://ai.google.dev/gemini-api/docs/rate-limits"}]},{"@type":"type.googleapis.com/google.rpc.QuotaFailure","violations":[{"quotaMetric":"generativelanguage.googleapis.com/generate_content_free_tier_requests","quotaId":"GenerateRequestsPerMinutePerProjectPerModel-FreeTier","quotaDimensions":{"model":"gemini-2.5-flash","location":"global"},"quotaValue":"5"}]},{"@type":"type.googleapis.com/google.rpc.RetryInfo","retryDelay":"1s"}]
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:35:02.684Z] transcribeAudio called with model gemini-2.5-flash. Base64 length: 107584
+[SUCCESS] Received text: [SILENCE]
+
+[2026-06-08T09:35:53.963Z] transcribeAudio called with model gemini-1.5-flash. Base64 length: 107948
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:35:58.967Z] transcribeAudio called with model gemini-1.5-flash. Base64 length: 107648
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:36:03.966Z] transcribeAudio called with model gemini-1.5-flash. Base64 length: 107944
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:36:08.969Z] transcribeAudio called with model gemini-1.5-flash. Base64 length: 108028
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:36:13.971Z] transcribeAudio called with model gemini-1.5-flash. Base64 length: 107784
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:36:18.974Z] transcribeAudio called with model gemini-1.5-flash. Base64 length: 107956
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 ] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:36:41.238Z] transcribeAudio called with model gemini-1.5-flash-latest. Base64 length: 107788
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 ] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:36:46.239Z] transcribeAudio called with model gemini-1.5-flash-latest. Base64 length: 107708
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 ] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:37:00.984Z] transcribeAudio called with model gemini-1.5-flash-latest. Base64 length: 107788
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 ] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:37:05.986Z] transcribeAudio called with model gemini-1.5-flash-latest. Base64 length: 107608
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 ] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:37:10.989Z] transcribeAudio called with model gemini-1.5-flash-latest. Base64 length: 107672
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 ] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:37:15.992Z] transcribeAudio called with model gemini-1.5-flash-latest. Base64 length: 107680
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 ] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:37:20.998Z] transcribeAudio called with model gemini-1.5-flash-latest. Base64 length: 107584
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 ] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:37:25.999Z] transcribeAudio called with model gemini-1.5-flash-latest. Base64 length: 107732
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 ] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:37:39.701Z] transcribeAudio called with model gemini-1.5-flash-latest. Base64 length: 107624
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 ] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:37:44.700Z] transcribeAudio called with model gemini-1.5-flash-latest. Base64 length: 107856
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 ] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:37:49.702Z] transcribeAudio called with model gemini-1.5-flash-latest. Base64 length: 107832
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 ] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:37:54.704Z] transcribeAudio called with model gemini-1.5-flash-latest. Base64 length: 107560
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 ] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:37:59.706Z] transcribeAudio called with model gemini-1.5-flash-latest. Base64 length: 108008
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 ] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:38:04.710Z] transcribeAudio called with model gemini-1.5-flash-latest. Base64 length: 107644
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 ] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:40:32.258Z] transcribeAudio called with model gemini-2.5-flash. Base64 length: 324008
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [503 ] This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:40:47.262Z] transcribeAudio called with model gemini-2.5-flash. Base64 length: 324260
+[SUCCESS] Received text: Hello sir, myself Devraj Singh, what would you like
+
+[2026-06-08T09:41:02.267Z] transcribeAudio called with model gemini-2.5-flash. Base64 length: 323788
+[SUCCESS] Received text: [SILENCE]
+
+[2026-06-08T09:41:17.267Z] transcribeAudio called with model gemini-2.5-flash. Base64 length: 324532
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [503 ] This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:41:32.272Z] transcribeAudio called with model gemini-2.5-flash. Base64 length: 324144
+[ERROR] Transcription error: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent: [503 ] This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.
+    at handleResponseNotOk (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:414:11)
+    at async makeRequest (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:387:9)
+    at async generateContent (/Users/devrajsingh/project/cheat/node_modules/@google/generative-ai/dist/index.js:832:22)
+    at async Object.transcribeAudio (/Users/devrajsingh/project/cheat/preload.js:90:22)
+
+[2026-06-08T09:41:47.278Z] transcribeAudio called with model gemini-2.5-flash. Base64 length: 323428
+[SUCCESS] Received text: Express JS
+
+[2026-06-08T09:42:02.283Z] transcribeAudio called with model gemini-2.5-flash. Base64 length: 324352
+[SUCCESS] Received text: X-ray X-ray hold in X-ray
+
+[2026-06-08T09:42:17.285Z] transcribeAudio called with model gemini-2.5-flash. Base64 length: 323572
+[SUCCESS] Received text: [SILENCE]

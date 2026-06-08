@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StealthAI</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ═══ Custom Title Bar ═══ -->
+  <header id="titlebar">
+    <div id="drag-handle">
+      <svg class="app-logo" width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M8 1L14.9 5.5V12.5L8 15L1.1 12.5V5.5L8 1Z" fill="#4F8EF7" opacity="0.9"/>
+        <path d="M8 5L11.5 7.25V11.75L8 13L4.5 11.75V7.25L8 5Z" fill="#1a1a2e"/>
+      </svg>
+      <span class="app-title">StealthAI</span>
+    </div>
+    <div id="titlebar-controls">
+      <input type="range" id="opacity-slider" min="15" max="100" value="90" title="Window Opacity">
+      <button class="titlebar-btn" id="btn-hide" title="Hide  ⌘⌥S">
+        <svg width="12" height="12" viewBox="0 0 12 12"><line x1="2" y1="6" x2="10" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <button class="titlebar-btn" id="btn-close" title="Close App">
+        <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 2L10 10M10 2L2 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ═══ Tab Navigation ═══ -->
+  <nav id="tab-bar">
+    <button class="tab active" data-tab="chat">
+      <span class="tab-icon">◆</span>Chat
+    </button>
+    <button class="tab" data-tab="transcript">
+      <span class="tab-icon">●</span>Transcript
+    </button>
+    <button class="tab" data-tab="context">
+      <span class="tab-icon">≡</span>Context
+    </button>
+    <button class="tab" data-tab="settings">
+      <span class="tab-icon">⚙</span>Config
+    </button>
+  </nav>
+
+  <!-- ═══ Chat Panel ═══ -->
+  <section id="panel-chat" class="panel active">
+    <div id="chat-messages">
+      <div class="empty-state">
+        <div class="empty-icon">◆</div>
+        <p>Ask anything. Responses stream in real-time.</p>
+        <p class="empty-hint">Tip: Paste your resume in the Context tab first.</p>
+      </div>
+    </div>
+    <div id="chat-input-area">
+      <div class="input-row">
+        <textarea id="chat-input" placeholder="Ask anything…" rows="1"></textarea>
+        <button id="btn-send" title="Send  ⌘↵">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8L14 2L8 14L7 9L2 8Z" fill="currentColor"/></svg>
+        </button>
+      </div>
+      <div class="input-actions">
+        <button id="btn-new-chat" class="chip" title="New conversation">New Chat</button>
+        <label class="chip toggle-chip" title="Lock scroll to bottom">
+          <input type="checkbox" id="auto-scroll-check" checked>
+          <span>Auto-scroll</span>
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Transcript Panel ═══ -->
+  <section id="panel-transcript" class="panel">
+    <div class="transcript-toolbar">
+      <button id="btn-listen" class="record-btn">
+        <span class="rec-dot"></span>
+        <span class="rec-label">Start Listening</span>
+      </button>
+      <select id="audio-source-select" title="Audio capture mode">
+        <option value="mic">🎤  Microphone</option>
+        <option value="system">🔊  System Audio</option>
+      </select>
+    </div>
+
+    <div id="device-row" class="transcript-toolbar secondary">
+      <label>Input Device</label>
+      <select id="audio-device-select"><option value="">Default</option></select>
+      <button id="btn-refresh-devices" class="icon-btn" title="Refresh devices">↻</button>
+    </div>
+
+    <div id="audio-meter">
+      <div id="audio-meter-fill"></div>
+    </div>
+
+    <div id="transcript-feed">
+      <div class="empty-state small">
+        <p>Live transcript will appear here.</p>
+      </div>
+    </div>
+
+    <button id="btn-send-transcript" class="action-btn" disabled>Insert into Chat →</button>
+  </section>
+
+  <!-- ═══ Context Panel ═══ -->
+  <section id="panel-context" class="panel">
+    <div class="panel-header">
+      <h3>Resume &amp; Knowledge Base</h3>
+      <p class="hint">Injected as system context with every Gemini request.</p>
+    </div>
+    <textarea id="context-textarea" placeholder="Paste your resume, technical notes, project descriptions, or any reference material…&#10;&#10;Example:&#10;• 5 years React, Node.js, Python, Go&#10;• Built distributed systems handling 10M+ RPM&#10;• Strong in system design, data structures, algorithms&#10;• Led migration from monolith to microservices"></textarea>
+    <div class="context-footer">
+      <button id="btn-upload-file" class="chip">📁 Upload .txt</button>
+      <input type="file" id="file-input" accept=".txt,.md,.text" hidden>
+      <span id="context-char-count" class="hint">0 chars</span>
+    </div>
+  </section>
+
+  <!-- ═══ Settings Panel ═══ -->
+  <section id="panel-settings" class="panel">
+    <div class="settings-section">
+      <label class="settings-label">Provider</label>
+      <select id="provider-select" class="form-select">
+        <option value="groq">Groq (Blazing Fast / High Quota)</option>
+        <option value="gemini">Google Gemini</option>
+      </select>
+    </div>
+
+    <div class="settings-section" id="api-key-container-groq">
+      <label class="settings-label">Groq API Key</label>
+      <input type="password" id="groq-api-key-input" placeholder="gsk_..." autocomplete="off" spellcheck="false">
+      <p class="hint">Get yours free at <strong>console.groq.com</strong></p>
+    </div>
+
+    <div class="settings-section" id="api-key-container-gemini" style="display: none;">
+      <label class="settings-label">Gemini API Key</label>
+      <input type="password" id="api-key-input" placeholder="Enter your Gemini API key" autocomplete="off" spellcheck="false">
+      <p class="hint">Get yours free at <strong>aistudio.google.com</strong></p>
+    </div>
+
+    <div class="settings-section">
+      <label class="settings-label">Model</label>
+      <select id="model-select" class="form-select">
+        <!-- Groq Models (Default) -->
+        <optgroup label="Groq Models" id="groq-models">
+          <option value="llama-3.3-70b-versatile">Llama 3.3 70B (Recommended)</option>
+          <option value="llama-3.1-8b-instant">Llama 3.1 8B (Fastest)</option>
+          <option value="mixtral-8x7b-32768">Mixtral 8x7B (Large Context)</option>
+        </optgroup>
+        <!-- Gemini Models -->
+        <optgroup label="Gemini Models" id="gemini-models" style="display: none;">
+          <option value="gemini-2.5-flash">Gemini 2.5 Flash — Fast & Stable</option>
+          <option value="gemini-2.5-pro">Gemini 2.5 Pro — Most Capable</option>
+          <option value="gemini-1.5-pro">Gemini 1.5 Pro — Quota Fallback</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <div class="settings-section">
+      <label class="settings-label">Keyboard Shortcuts</label>
+      <div class="shortcut-row"><kbd>⌘ ⌥ S</kbd><span>Toggle overlay visibility</span></div>
+      <div class="shortcut-row"><kbd>⌘ ⌥ T</kbd><span>Toggle Click-Through (Stealth Mode)</span></div>
+      <div class="shortcut-row"><kbd>⌘ ↵</kbd><span>Send message</span></div>
+      <div class="shortcut-row"><kbd>Esc</kbd><span>Stop streaming</span></div>
+    </div>
+
+    <div class="settings-section">
+      <label class="settings-label">Hybrid Audio Setup</label>
+      <div class="guide-card">
+        <p><strong>To capture the interviewer's audio:</strong></p>
+        <ol>
+          <li>Install <strong>BlackHole 2ch</strong> (free virtual audio driver)</li>
+          <li>Open <strong>Audio MIDI Setup</strong> → Create <em>Multi-Output Device</em></li>
+          <li>Check your speakers <strong>+</strong> BlackHole 2ch</li>
+          <li>Set Multi-Output Device as system audio output</li>
+          <li>In the Transcript tab, select <strong>BlackHole 2ch</strong> as input device</li>
+        </ol>
+        <p class="hint">This routes speaker output back as a mic input so Speech Recognition can transcribe both sides.</p>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <label class="settings-label">Data</label>
+      <button id="btn-clear-all" class="action-btn danger">Clear All Data &amp; History</button>
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
