@@ -823,6 +823,98 @@ function showError(message) {
   }, 4000);
 }
 
+// ─── Custom Select Wrapper ─────────────────────────────────────────
+
+function convertToCustomSelect(selectElement) {
+  // Hide original select
+  selectElement.style.display = 'none';
+  
+  // Create wrapper
+  const wrapper = document.createElement('div');
+  wrapper.className = 'custom-select-wrapper';
+  selectElement.parentNode.insertBefore(wrapper, selectElement);
+  wrapper.appendChild(selectElement);
+  
+  // Create trigger
+  const trigger = document.createElement('div');
+  trigger.className = 'custom-select-trigger';
+  const triggerText = document.createElement('span');
+  trigger.appendChild(triggerText);
+  const arrow = document.createElement('span');
+  arrow.innerHTML = '▼';
+  arrow.style.fontSize = '9px';
+  arrow.style.opacity = '0.7';
+  trigger.appendChild(arrow);
+  wrapper.appendChild(trigger);
+  
+  // Create options container
+  const optionsContainer = document.createElement('div');
+  optionsContainer.className = 'custom-select-options';
+  wrapper.appendChild(optionsContainer);
+  
+  function updateTrigger() {
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+    triggerText.textContent = selectedOption ? selectedOption.textContent : '';
+  }
+  
+  function renderOptions() {
+    optionsContainer.innerHTML = '';
+    Array.from(selectElement.children).forEach(child => {
+      if (child.tagName === 'OPTGROUP') {
+        if (child.style.display === 'none') return;
+        const groupLabel = document.createElement('div');
+        groupLabel.className = 'custom-select-optgroup';
+        groupLabel.textContent = child.label;
+        optionsContainer.appendChild(groupLabel);
+        Array.from(child.children).forEach(option => {
+          createOptionElement(option);
+        });
+      } else if (child.tagName === 'OPTION') {
+        createOptionElement(child);
+      }
+    });
+  }
+
+  function createOptionElement(option) {
+    const optDiv = document.createElement('div');
+    optDiv.className = 'custom-select-option';
+    optDiv.textContent = option.textContent;
+    optDiv.dataset.value = option.value;
+    optDiv.addEventListener('click', (e) => {
+      e.stopPropagation();
+      selectElement.value = option.value;
+      selectElement.dispatchEvent(new Event('change'));
+      updateTrigger();
+      optionsContainer.classList.remove('open');
+    });
+    optionsContainer.appendChild(optDiv);
+  }
+  
+  // Toggle dropdown
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    // Close others
+    document.querySelectorAll('.custom-select-options').forEach(opt => {
+      if (opt !== optionsContainer) opt.classList.remove('open');
+    });
+    renderOptions(); // Re-render for dynamic options
+    optionsContainer.classList.toggle('open');
+  });
+  
+  // Initial update
+  updateTrigger();
+  
+  // Listen for external changes to select
+  selectElement.addEventListener('change', updateTrigger);
+  
+  // Close on outside click
+  document.addEventListener('click', () => {
+    optionsContainer.classList.remove('open');
+  });
+
+  return { update: renderOptions };
+}
+
 // ═══════════════════════════════════════════════════════════════════
 //  INITIALIZATION
 // ═══════════════════════════════════════════════════════════════════
@@ -836,7 +928,10 @@ function init() {
   enumerateAudioDevices();
   initSpeechRecognition();
 
-
+  // Convert all native selects to custom stealth selects
+  document.querySelectorAll('select').forEach(select => {
+    convertToCustomSelect(select);
+  });
 
   // Focus chat input
   DOM.chatInput.focus();
