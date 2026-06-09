@@ -926,7 +926,6 @@ function init() {
   initSettings();
   loadChatHistory();
   enumerateAudioDevices();
-  initSpeechRecognition();
 
   // Convert all native selects to custom stealth selects
   document.querySelectorAll('select').forEach(select => {
