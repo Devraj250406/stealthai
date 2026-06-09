@@ -548,6 +548,9 @@ async function enumerateAudioDevices() {
       opt.textContent = device.label || `Microphone ${DOM.audioDeviceSelect.options.length}`;
       DOM.audioDeviceSelect.appendChild(opt);
     });
+    
+    // Force the custom dropdown to refresh its visual label
+    DOM.audioDeviceSelect.dispatchEvent(new Event('change'));
   } catch (err) {
     console.warn('Failed to enumerate audio devices:', err);
   }
@@ -646,6 +649,9 @@ function initSettings() {
         localStorage.setItem(KEYS.MODEL, DOM.modelSelect.value);
       }
     }
+    
+    // Force the custom dropdown to refresh its visual label and state
+    DOM.modelSelect.dispatchEvent(new Event('change'));
   }
 
   providerSelect.addEventListener('change', updateProviderUI);
