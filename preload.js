@@ -97,9 +97,12 @@ contextBridge.exposeInMainWorld('stealthAPI', {
         if (isCancelled) break;
         onChunk(chunk.text());
       }
-      if (!isCancelled) onDone();
+      onDone();
     } catch (err) {
-      if (err.name === 'AbortError') return;
+      if (err.name === 'AbortError') {
+        onDone();
+        return;
+      }
       console.error(err);
       onError(err.message || 'Stream failed');
     }
@@ -168,16 +171,22 @@ contextBridge.exposeInMainWorld('stealthAPI', {
         });
 
         stream.on('end', () => {
-          if (!isCancelled) onDone();
+          onDone();
         });
         
         stream.on('error', (err) => {
-          if (err.name === 'AbortError') return;
+          if (err.name === 'AbortError' || isCancelled) {
+            onDone();
+            return;
+          }
           onError(err.message);
         });
 
       } catch (error) {
-        if (error.name === 'AbortError') return;
+        if (error.name === 'AbortError' || isCancelled) {
+          onDone();
+          return;
+        }
         console.error('Groq streaming error:', error);
         onError(error.message || String(error));
       }
