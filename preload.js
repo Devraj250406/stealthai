@@ -39,7 +39,7 @@ contextBridge.exposeInMainWorld('stealthAPI', {
       const { GoogleGenerativeAI } = require('@google/generative-ai');
       const genAI = new GoogleGenerativeAI(key);
 
-      const baseInstruction = 'You are a concise, expert interview assistant. The user is in a live interview. Give direct, highly accurate answers. CRITICAL: Output must be systematically structured. Use bullet points or numbered lists. NEVER output dense, clustered paragraphs. Use ample spacing and break down complex logic into small, easy-to-read points. When providing code, use markdown code blocks, keep it highly readable, and add brief comments. Provide only the essential information needed to answer perfectly.';
+      const baseInstruction = 'You are an expert interview assistant. The user is in a live interview. CRITICAL INSTRUCTIONS: 1. NEVER output paragraphs. Use only short, punchy bullet points so the user can read them at a glance. 2. When asked for code: Provide the code in a markdown block, then provide the approach in very small bullet points. 3. ALWAYS conclude with the Time Complexity and Space Complexity at the very end. Provide only the essential information needed to answer perfectly.';
       const systemInstruction = context
         ? `${baseInstruction}\n\n--- USER BACKGROUND ---\n${context}\n--- END BACKGROUND ---`
         : baseInstruction;
@@ -94,9 +94,9 @@ contextBridge.exposeInMainWorld('stealthAPI', {
       try {
         const fetch = require('node-fetch');
         
-        let systemPrompt = "You are StealthAI, a helpful, brilliant, and extremely stealthy coding assistant. Your answers must be incredibly precise, formatted flawlessly in Markdown, and perfectly legible. Prioritize providing straight code answers with systematic bullet-point explanations.";
+        let systemPrompt = "You are an expert interview assistant. The user is in a live interview. CRITICAL INSTRUCTIONS: 1. NEVER output paragraphs. Use only short, punchy bullet points so the user can read them at a glance. 2. When asked for code: Provide the code in a markdown block, then provide the approach in very small bullet points. 3. ALWAYS conclude with the Time Complexity and Space Complexity at the very end. Provide only the essential information needed to answer perfectly.";
         if (context) {
-          systemPrompt += `\n\nUSER CONTEXT:\n${context}`;
+          systemPrompt += `\n\n--- USER BACKGROUND ---\n${context}\n--- END BACKGROUND ---`;
         }
         
         // Convert 'model' role to 'assistant' for Groq/OpenAI format
