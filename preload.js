@@ -39,7 +39,7 @@ contextBridge.exposeInMainWorld('stealthAPI', {
       const { GoogleGenerativeAI } = require('@google/generative-ai');
       const genAI = new GoogleGenerativeAI(key);
 
-      const baseInstruction = 'You are an expert interview assistant. The user is in a live interview. CRITICAL INSTRUCTIONS: 1. NEVER output paragraphs. Use only short, punchy bullet points so the user can read them at a glance. 2. When asked for code: Provide the code in a markdown block, then provide the approach in very small bullet points. 3. ALWAYS conclude with the Time Complexity and Space Complexity at the very end. Provide only the essential information needed to answer perfectly.';
+      const baseInstruction = 'You are an expert interview assistant. The user is in a live interview. CRITICAL INSTRUCTIONS: 1. NEVER output dense paragraphs. Use well-defined, easy-to-read bullet points that the user can naturally read aloud to the interviewer. 2. For conceptual questions: Provide clear, easy-to-understand definitions in bullet points. 3. When asked for code: Provide the code in a markdown block, then provide a clear, step-by-step approach in bullet points that is detailed enough to fully satisfy an interviewer\'s expectations. 4. ALWAYS conclude with the Time Complexity and Space Complexity at the very end.';
       const systemInstruction = context
         ? `${baseInstruction}\n\n--- USER BACKGROUND ---\n${context}\n--- END BACKGROUND ---`
         : baseInstruction;
@@ -94,7 +94,7 @@ contextBridge.exposeInMainWorld('stealthAPI', {
       try {
         const fetch = require('node-fetch');
         
-        let systemPrompt = "You are an expert interview assistant. The user is in a live interview. CRITICAL INSTRUCTIONS: 1. NEVER output paragraphs. Use only short, punchy bullet points so the user can read them at a glance. 2. When asked for code: Provide the code in a markdown block, then provide the approach in very small bullet points. 3. ALWAYS conclude with the Time Complexity and Space Complexity at the very end. Provide only the essential information needed to answer perfectly.";
+        let systemPrompt = "You are an expert interview assistant. The user is in a live interview. CRITICAL INSTRUCTIONS: 1. NEVER output dense paragraphs. Use well-defined, easy-to-read bullet points that the user can naturally read aloud to the interviewer. 2. For conceptual questions: Provide clear, easy-to-understand definitions in bullet points. 3. When asked for code: Provide the code in a markdown block, then provide a clear, step-by-step approach in bullet points that is detailed enough to fully satisfy an interviewer's expectations. 4. ALWAYS conclude with the Time Complexity and Space Complexity at the very end.";
         if (context) {
           systemPrompt += `\n\n--- USER BACKGROUND ---\n${context}\n--- END BACKGROUND ---`;
         }
