@@ -12,7 +12,7 @@ const DOM = {
   chatMessages:    $('#chat-messages'),
   chatInput:       $('#chat-input'),
   btnSend:         $('#btn-send'),
-  btnSend:         $('#btn-send'),
+  btnStop:         $('#btn-stop'),
   btnNewChat:      $('#btn-new-chat'),
   autoScrollCheck: $('#auto-scroll-check'),
 
@@ -102,6 +102,13 @@ function saveChatHistory() {
 }
 
 function clearChat() {
+  window.stealthAPI.cancelStream();
+  state.isStreaming = false;
+  state.streamBuffer = '';
+  DOM.btnSend.disabled = false;
+  DOM.btnSend.style.display = 'block';
+  if (DOM.btnStop) DOM.btnStop.style.display = 'none';
+  
   state.messages = [];
   localStorage.removeItem(KEYS.MESSAGES);
   DOM.chatMessages.innerHTML = `
@@ -236,6 +243,8 @@ async function sendMessage() {
   state.isStreaming = true;
   state.streamBuffer = '';
   DOM.btnSend.disabled = true;
+  DOM.btnSend.style.display = 'none';
+  if (DOM.btnStop) DOM.btnStop.style.display = 'block';
 
   const streamBody = createStreamingMessage();
   scrollToBottom();
@@ -247,6 +256,8 @@ async function sendMessage() {
     state.isStreaming = false;
     state.streamBuffer = '';
     DOM.btnSend.disabled = false;
+    DOM.btnSend.style.display = 'block';
+    if (DOM.btnStop) DOM.btnStop.style.display = 'none';
   }
 
   const payload = {
@@ -277,6 +288,8 @@ async function sendMessage() {
         streamBody.innerHTML = `<span style="color:var(--danger)">Error: ${error}</span>`;
         state.isStreaming = false;
         DOM.btnSend.disabled = false;
+        DOM.btnSend.style.display = 'block';
+        if (DOM.btnStop) DOM.btnStop.style.display = 'none';
       }
       showError(error);
     }
@@ -709,6 +722,11 @@ function initUI() {
 
   // Send button
   DOM.btnSend.addEventListener('click', sendMessage);
+  if (DOM.btnStop) {
+    DOM.btnStop.addEventListener('click', () => {
+      window.stealthAPI.cancelStream();
+    });
+  }
 
   // Keyboard shortcuts
   DOM.chatInput.addEventListener('keydown', (e) => {

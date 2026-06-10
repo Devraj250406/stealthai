@@ -31,11 +31,25 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
+// ─── Stream Cancellation ──────────────────────────────────────────
+let currentAbortController = null;
+let isCancelled = false;
+
 // ─── Expose Secure API to Renderer ────────────────────────────────
 contextBridge.exposeInMainWorld('stealthAPI', {
+  cancelStream: () => {
+    isCancelled = true;
+    if (currentAbortController) {
+      currentAbortController.abort();
+      currentAbortController = null;
+    }
+  },
+
   // Gemini streaming (executed in preload using native Web Fetch)
   streamGemini: async ({ key, model, messages, context, onChunk, onDone, onError }) => {
     try {
+      isCancelled = false;
+      currentAbortController = new AbortController();
       const { GoogleGenerativeAI } = require('@google/generative-ai');
       const genAI = new GoogleGenerativeAI(key);
 
@@ -80,10 +94,12 @@ contextBridge.exposeInMainWorld('stealthAPI', {
       const result = await chat.sendMessageStream(promptParts);
 
       for await (const chunk of result.stream) {
+        if (isCancelled) break;
         onChunk(chunk.text());
       }
-      onDone();
+      if (!isCancelled) onDone();
     } catch (err) {
+      if (err.name === 'AbortError') return;
       console.error(err);
       onError(err.message || 'Stream failed');
     }
@@ -92,6 +108,8 @@ contextBridge.exposeInMainWorld('stealthAPI', {
   streamGroq: ({ key, model, messages, context, onChunk, onDone, onError }) => {
     (async () => {
       try {
+        isCancelled = false;
+        currentAbortController = new AbortController();
         const fetch = require('node-fetch');
         
         let systemPrompt = "You are an expert interview assistant. The user is in a live interview. CRITICAL INSTRUCTIONS: 1. NEVER output dense paragraphs. Use well-defined, easy-to-read bullet points that the user can naturally read aloud to the interviewer. 2. For conceptual questions: Provide clear, easy-to-understand definitions in bullet points. 3. When asked for code: Provide the code in a markdown block, then provide a clear, step-by-step approach in bullet points that is detailed enough to fully satisfy an interviewer's expectations. 4. ALWAYS conclude with the Time Complexity and Space Complexity at the very end.";
@@ -119,7 +137,8 @@ contextBridge.exposeInMainWorld('stealthAPI', {
             messages: formattedMessages,
             temperature: 0.3,
             stream: true
-          })
+          }),
+          signal: currentAbortController.signal
         });
 
         if (!response.ok) {
@@ -130,6 +149,7 @@ contextBridge.exposeInMainWorld('stealthAPI', {
         // Parse SSE stream
         const stream = response.body;
         stream.on('data', chunk => {
+          if (isCancelled) return;
           const lines = chunk.toString().split('\n');
           for (const line of lines) {
             if (line.startsWith('data: ')) {
@@ -148,14 +168,16 @@ contextBridge.exposeInMainWorld('stealthAPI', {
         });
 
         stream.on('end', () => {
-          onDone();
+          if (!isCancelled) onDone();
         });
         
         stream.on('error', (err) => {
+          if (err.name === 'AbortError') return;
           onError(err.message);
         });
 
       } catch (error) {
+        if (error.name === 'AbortError') return;
         console.error('Groq streaming error:', error);
         onError(error.message || String(error));
       }
