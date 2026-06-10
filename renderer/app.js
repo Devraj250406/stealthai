@@ -712,7 +712,7 @@ function initUI() {
 
   // Keyboard shortcuts
   DOM.chatInput.addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
