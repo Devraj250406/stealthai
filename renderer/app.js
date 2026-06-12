@@ -657,7 +657,7 @@ function initSettings() {
       geminiContainer.style.display = 'block';
       groqModels.style.display = 'none';
       geminiModels.style.display = 'block';
-      if (!DOM.modelSelect.value.includes('gemini')) {
+      if (!DOM.modelSelect.value.includes('gemini') && !DOM.modelSelect.value.includes('gemma')) {
         DOM.modelSelect.value = 'gemini-2.5-flash';
         localStorage.setItem(KEYS.MODEL, DOM.modelSelect.value);
       }
