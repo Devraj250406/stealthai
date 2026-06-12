@@ -55,7 +55,10 @@ contextBridge.exposeInMainWorld('stealthAPI', {
       const data = await response.json();
       return data.models
         .filter(m => m.supportedGenerationMethods && m.supportedGenerationMethods.includes('generateContent'))
-        .map(m => m.name.replace('models/', ''));
+        .map(m => ({
+          id: m.name.replace('models/', ''),
+          displayName: m.displayName || m.name.replace('models/', '')
+        }));
     } catch (e) {
       console.error('Failed to fetch Gemini models:', e);
       return [];

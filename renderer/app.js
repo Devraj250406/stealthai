@@ -677,24 +677,25 @@ function initSettings() {
 
   async function refreshGeminiModelsUI(key) {
     if (!key) return;
-    const models = await window.stealthAPI.getValidGeminiModels(key);
-    if (models.length > 0) {
-      state.validGeminiModels = models;
-      const opts = geminiModels.querySelectorAll('option');
+    const modelObjs = await window.stealthAPI.getValidGeminiModels(key);
+    if (modelObjs.length > 0) {
+      state.validGeminiModels = modelObjs.map(m => m.id);
+      
+      // Clear any existing options and rebuild dynamically
+      geminiModels.innerHTML = '';
+      
       let firstValid = null;
-      opts.forEach(opt => {
-        if (!models.includes(opt.value)) {
-          opt.style.display = 'none';
-          opt.disabled = true;
-        } else {
-          opt.style.display = 'block';
-          opt.disabled = false;
-          if (!firstValid) firstValid = opt.value;
-        }
+      modelObjs.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.id;
+        opt.textContent = m.displayName;
+        geminiModels.appendChild(opt);
+        if (!firstValid) firstValid = m.id;
       });
+
       // If currently selected model is suddenly invalid, fallback to first valid one
-      if (DOM.modelSelect.value.includes('gemini') || DOM.modelSelect.value.includes('gemma')) {
-        if (!models.includes(DOM.modelSelect.value) && firstValid) {
+      if (DOM.modelSelect.value.includes('gemini') || DOM.modelSelect.value.includes('gemma') || !DOM.modelSelect.value) {
+        if (!state.validGeminiModels.includes(DOM.modelSelect.value) && firstValid) {
            DOM.modelSelect.value = firstValid;
            localStorage.setItem(KEYS.MODEL, firstValid);
         }
