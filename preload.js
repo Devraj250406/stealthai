@@ -193,6 +193,89 @@ contextBridge.exposeInMainWorld('stealthAPI', {
     })();
   },
 
+  streamDeepSeek: ({ key, model, messages, context, onChunk, onDone, onError }) => {
+    (async () => {
+      try {
+        isCancelled = false;
+        currentAbortController = new AbortController();
+        const fetch = require('node-fetch');
+        
+        let systemPrompt = "You are an expert interview assistant. The user is in a live interview. CRITICAL INSTRUCTIONS: 1. NEVER output dense paragraphs. Use well-defined, easy-to-read bullet points that the user can naturally read aloud to the interviewer. 2. For conceptual questions: Provide clear, easy-to-understand definitions in bullet points. 3. When asked for code: Provide the code in a markdown block, then provide a clear, step-by-step approach in bullet points that is detailed enough to fully satisfy an interviewer's expectations. 4. ALWAYS conclude with the Time Complexity and Space Complexity at the very end.";
+        if (context) {
+          systemPrompt += `\n\n--- USER BACKGROUND ---\n${context}\n--- END BACKGROUND ---`;
+        }
+        
+        const formattedMessages = [
+          { role: 'system', content: systemPrompt },
+          ...messages.map(m => ({
+            role: m.role === 'model' ? 'assistant' : m.role,
+            content: m.content
+          }))
+        ];
+
+        const response = await fetch('https://api.deepseek.com/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${key}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: model,
+            messages: formattedMessages,
+            temperature: 0.3,
+            stream: true
+          }),
+          signal: currentAbortController.signal
+        });
+
+        if (!response.ok) {
+          const errorData = await response.text();
+          throw new Error(`DeepSeek API Error: ${response.status} - ${errorData}`);
+        }
+
+        const stream = response.body;
+        stream.on('data', chunk => {
+          if (isCancelled) return;
+          const lines = chunk.toString().split('\n');
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const dataStr = line.slice(6).trim();
+              if (dataStr === '[DONE]') continue;
+              try {
+                const data = JSON.parse(dataStr);
+                if (data.choices && data.choices[0].delta && data.choices[0].delta.content) {
+                  onChunk(data.choices[0].delta.content);
+                }
+              } catch (e) {
+                // Ignore parse errors
+              }
+            }
+          }
+        });
+
+        stream.on('end', () => {
+          onDone();
+        });
+        
+        stream.on('error', (err) => {
+          if (err.name === 'AbortError' || isCancelled) {
+            onDone();
+            return;
+          }
+          onError(err.message);
+        });
+
+      } catch (error) {
+        if (error.name === 'AbortError' || isCancelled) {
+          onDone();
+          return;
+        }
+        console.error('DeepSeek streaming error:', error);
+        onError(error.message || String(error));
+      }
+    })();
+  },
+
   // Audio Transcription using Gemini (Stealth Hybrid Capture)
   transcribeAudio: async (key, modelString, base64Audio) => {
     const fs = require('fs');

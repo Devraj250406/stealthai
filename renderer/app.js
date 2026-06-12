@@ -185,6 +185,8 @@ async function sendMessage() {
   const provider = document.getElementById('provider-select').value;
   const geminiKey = DOM.apiKeyInput.value.trim();
   const groqKey = document.getElementById('groq-api-key-input').value.trim();
+  const deepseekKeyInput = document.getElementById('deepseek-api-key-input');
+  const deepseekKey = deepseekKeyInput ? deepseekKeyInput.value.trim() : '';
 
   if (provider === 'gemini' && !geminiKey) {
     showError('Please enter your Gemini API key in the Config tab.');
@@ -192,6 +194,10 @@ async function sendMessage() {
   }
   if (provider === 'groq' && !groqKey) {
     showError('Please enter your Groq API key in the Config tab.');
+    return;
+  }
+  if (provider === 'deepseek' && !deepseekKey) {
+    showError('Please enter your DeepSeek API key in the Config tab.');
     return;
   }
 
@@ -261,7 +267,7 @@ async function sendMessage() {
   }
 
   const payload = {
-    key: provider === 'groq' ? groqKey : geminiKey,
+    key: provider === 'groq' ? groqKey : (provider === 'deepseek' ? deepseekKey : geminiKey),
     model: DOM.modelSelect.value,
     messages: state.messages,
     context: DOM.contextTextarea.value.trim(),
@@ -297,6 +303,8 @@ async function sendMessage() {
 
   if (provider === 'groq') {
     await window.stealthAPI.streamGroq(payload);
+  } else if (provider === 'deepseek') {
+    await window.stealthAPI.streamDeepSeek(payload);
   } else {
     await window.stealthAPI.streamGemini(payload);
   }
@@ -620,10 +628,13 @@ function handleFileUpload(e) {
 
 function initSettings() {
   const groqKeyInput = document.getElementById('groq-api-key-input');
+  const deepseekKeyInput = document.getElementById('deepseek-api-key-input');
   const providerSelect = document.getElementById('provider-select');
   const groqContainer = document.getElementById('api-key-container-groq');
+  const deepseekContainer = document.getElementById('api-key-container-deepseek');
   const geminiContainer = document.getElementById('api-key-container-gemini');
   const groqModels = document.getElementById('groq-models');
+  const deepseekModels = document.getElementById('deepseek-models');
   const geminiModels = document.getElementById('gemini-models');
 
   // Load saved settings
@@ -632,6 +643,9 @@ function initSettings() {
 
   const savedGroqKey = localStorage.getItem('stealth_groq_api_key');
   if (savedGroqKey) groqKeyInput.value = savedGroqKey;
+
+  const savedDeepseekKey = localStorage.getItem('stealth_deepseek_api_key');
+  if (savedDeepseekKey && deepseekKeyInput) deepseekKeyInput.value = savedDeepseekKey;
 
   const savedProvider = localStorage.getItem('stealth_provider') || 'groq';
   providerSelect.value = savedProvider;
@@ -645,17 +659,32 @@ function initSettings() {
     
     if (provider === 'groq') {
       groqContainer.style.display = 'block';
+      deepseekContainer.style.display = 'none';
       geminiContainer.style.display = 'none';
       groqModels.style.display = 'block';
+      deepseekModels.style.display = 'none';
       geminiModels.style.display = 'none';
-      if (DOM.modelSelect.value.includes('gemini')) {
+      if (!DOM.modelSelect.value.includes('llama') && !DOM.modelSelect.value.includes('mixtral')) {
         DOM.modelSelect.value = 'llama-3.3-70b-versatile';
+        localStorage.setItem(KEYS.MODEL, DOM.modelSelect.value);
+      }
+    } else if (provider === 'deepseek') {
+      groqContainer.style.display = 'none';
+      deepseekContainer.style.display = 'block';
+      geminiContainer.style.display = 'none';
+      groqModels.style.display = 'none';
+      deepseekModels.style.display = 'block';
+      geminiModels.style.display = 'none';
+      if (!DOM.modelSelect.value.includes('deepseek')) {
+        DOM.modelSelect.value = 'deepseek-reasoner';
         localStorage.setItem(KEYS.MODEL, DOM.modelSelect.value);
       }
     } else {
       groqContainer.style.display = 'none';
+      deepseekContainer.style.display = 'none';
       geminiContainer.style.display = 'block';
       groqModels.style.display = 'none';
+      deepseekModels.style.display = 'none';
       geminiModels.style.display = 'block';
       if (!DOM.modelSelect.value.includes('gemini')) {
         DOM.modelSelect.value = 'gemini-2.5-flash';
@@ -679,6 +708,12 @@ function initSettings() {
     localStorage.setItem('stealth_groq_api_key', groqKeyInput.value.trim());
   });
 
+  if (deepseekKeyInput) {
+    deepseekKeyInput.addEventListener('input', () => {
+      localStorage.setItem('stealth_deepseek_api_key', deepseekKeyInput.value.trim());
+    });
+  }
+
   DOM.modelSelect.addEventListener('change', () => {
     localStorage.setItem(KEYS.MODEL, DOM.modelSelect.value);
   });
@@ -689,6 +724,7 @@ function initSettings() {
     clearChat();
     DOM.apiKeyInput.value = '';
     groqKeyInput.value = '';
+    if (deepseekKeyInput) deepseekKeyInput.value = '';
     DOM.contextTextarea.value = '';
     updateCharCount();
     state.transcriptText = '';
