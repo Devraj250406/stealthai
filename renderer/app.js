@@ -55,6 +55,7 @@ const state = {
   audioAnalyser: null,
   meterAnimId: null,
   pendingScreenshot: null, // base64 string
+  validGeminiModels: null, // array of validated model strings
 };
 
 // ─── Storage Keys ──────────────────────────────────────────────────
@@ -195,7 +196,10 @@ async function sendMessage() {
     return;
   }
 
-
+  if (provider === 'gemini' && state.validGeminiModels && !state.validGeminiModels.includes(DOM.modelSelect.value)) {
+    showError(`Error: The model ${DOM.modelSelect.value} is not supported or was deprecated by Google. Please select a valid model.`);
+    return;
+  }
 
   // Add user message
   const msgObj = { role: 'user', content: text };
@@ -665,6 +669,39 @@ function initSettings() {
     
     // Force the custom dropdown to refresh its visual label and state
     DOM.modelSelect.dispatchEvent(new Event('change'));
+    
+    if (provider === 'gemini') {
+      refreshGeminiModelsUI(DOM.apiKeyInput.value.trim());
+    }
+  }
+
+  async function refreshGeminiModelsUI(key) {
+    if (!key) return;
+    const models = await window.stealthAPI.getValidGeminiModels(key);
+    if (models.length > 0) {
+      state.validGeminiModels = models;
+      const opts = geminiModels.querySelectorAll('option');
+      let firstValid = null;
+      opts.forEach(opt => {
+        if (!models.includes(opt.value)) {
+          opt.style.display = 'none';
+          opt.disabled = true;
+        } else {
+          opt.style.display = 'block';
+          opt.disabled = false;
+          if (!firstValid) firstValid = opt.value;
+        }
+      });
+      // If currently selected model is suddenly invalid, fallback to first valid one
+      if (DOM.modelSelect.value.includes('gemini') || DOM.modelSelect.value.includes('gemma')) {
+        if (!models.includes(DOM.modelSelect.value) && firstValid) {
+           DOM.modelSelect.value = firstValid;
+           localStorage.setItem(KEYS.MODEL, firstValid);
+        }
+      }
+      geminiModels.label = "Gemini Models (Validated)";
+      DOM.modelSelect.dispatchEvent(new Event('change'));
+    }
   }
 
   providerSelect.addEventListener('change', updateProviderUI);
@@ -673,6 +710,9 @@ function initSettings() {
   // Auto-save on change
   DOM.apiKeyInput.addEventListener('input', () => {
     localStorage.setItem(KEYS.API_KEY, DOM.apiKeyInput.value.trim());
+    if (providerSelect.value === 'gemini') {
+      refreshGeminiModelsUI(DOM.apiKeyInput.value.trim());
+    }
   });
 
   groqKeyInput.addEventListener('input', () => {

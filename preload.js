@@ -45,6 +45,23 @@ contextBridge.exposeInMainWorld('stealthAPI', {
     }
   },
 
+  getValidGeminiModels: async (key) => {
+    try {
+      const fetch = require('node-fetch');
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status}`);
+      }
+      const data = await response.json();
+      return data.models
+        .filter(m => m.supportedGenerationMethods && m.supportedGenerationMethods.includes('generateContent'))
+        .map(m => m.name.replace('models/', ''));
+    } catch (e) {
+      console.error('Failed to fetch Gemini models:', e);
+      return [];
+    }
+  },
+
   // Gemini streaming (executed in preload using native Web Fetch)
   streamGemini: async ({ key, model, messages, context, onChunk, onDone, onError }) => {
     try {
