@@ -125,7 +125,6 @@
       <label class="settings-label">Provider</label>
       <select id="provider-select" class="form-select">
         <option value="groq">Groq (Blazing Fast / High Quota)</option>
-        <option value="deepseek">DeepSeek (Native API)</option>
         <option value="gemini">Google Gemini</option>
       </select>
     </div>
@@ -134,12 +133,6 @@
       <label class="settings-label">Groq API Key</label>
       <input type="password" id="groq-api-key-input" placeholder="gsk_..." autocomplete="off" spellcheck="false">
       <p class="hint">Get yours free at <strong>console.groq.com</strong></p>
-    </div>
-
-    <div class="settings-section" id="api-key-container-deepseek" style="display: none;">
-      <label class="settings-label">DeepSeek API Key</label>
-      <input type="password" id="deepseek-api-key-input" placeholder="sk-..." autocomplete="off" spellcheck="false">
-      <p class="hint">Get yours at <strong>platform.deepseek.com</strong></p>
     </div>
 
     <div class="settings-section" id="api-key-container-gemini" style="display: none;">
@@ -151,11 +144,6 @@
     <div class="settings-section">
       <label class="settings-label">Model</label>
       <select id="model-select" class="form-select">
-        <!-- DeepSeek Models -->
-        <optgroup label="DeepSeek Models" id="deepseek-models" style="display: none;">
-          <option value="deepseek-reasoner">DeepSeek Reasoner (R1)</option>
-          <option value="deepseek-chat">DeepSeek Chat (V3)</option>
-        </optgroup>
         <!-- Groq Models (Default) -->
         <optgroup label="Groq Models" id="groq-models">
           <option value="deepseek-r1-distill-llama-70b">DeepSeek R1 70B (Advanced Reasoning)</option>
