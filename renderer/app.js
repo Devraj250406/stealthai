@@ -56,6 +56,7 @@ const state = {
   meterAnimId: null,
   pendingScreenshot: null, // base64 string
   validGeminiModels: null, // array of validated model strings
+  validGroqModels: null,   // array of validated model strings
 };
 
 // ─── Storage Keys ──────────────────────────────────────────────────
@@ -198,6 +199,11 @@ async function sendMessage() {
 
   if (provider === 'gemini' && state.validGeminiModels && !state.validGeminiModels.includes(DOM.modelSelect.value)) {
     showError(`Error: The model ${DOM.modelSelect.value} is not supported or was deprecated by Google. Please select a valid model.`);
+    return;
+  }
+  
+  if (provider === 'groq' && state.validGroqModels && !state.validGroqModels.includes(DOM.modelSelect.value)) {
+    showError(`Error: The model ${DOM.modelSelect.value} is not supported or was decommissioned by Groq. Please select a valid model.`);
     return;
   }
 
@@ -672,6 +678,38 @@ function initSettings() {
     
     if (provider === 'gemini') {
       refreshGeminiModelsUI(DOM.apiKeyInput.value.trim());
+    } else if (provider === 'groq') {
+      refreshGroqModelsUI(groqKeyInput.value.trim());
+    }
+  }
+
+  async function refreshGroqModelsUI(key) {
+    if (!key) return;
+    const modelObjs = await window.stealthAPI.getValidGroqModels(key);
+    if (modelObjs.length > 0) {
+      state.validGroqModels = modelObjs.map(m => m.id);
+      
+      // Clear any existing options and rebuild dynamically
+      groqModels.innerHTML = '';
+      
+      let firstValid = null;
+      modelObjs.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.id;
+        opt.textContent = m.displayName;
+        groqModels.appendChild(opt);
+        if (!firstValid) firstValid = m.id;
+      });
+
+      // If currently selected model is suddenly invalid, fallback to first valid one
+      if (DOM.modelSelect.value && !DOM.modelSelect.value.includes('gemini') && !DOM.modelSelect.value.includes('gemma')) {
+        if (!state.validGroqModels.includes(DOM.modelSelect.value) && firstValid) {
+           DOM.modelSelect.value = firstValid;
+           localStorage.setItem(KEYS.MODEL, firstValid);
+        }
+      }
+      groqModels.label = "Groq Models (Validated)";
+      DOM.modelSelect.dispatchEvent(new Event('change'));
     }
   }
 
@@ -718,6 +756,9 @@ function initSettings() {
 
   groqKeyInput.addEventListener('input', () => {
     localStorage.setItem('stealth_groq_api_key', groqKeyInput.value.trim());
+    if (providerSelect.value === 'groq') {
+      refreshGroqModelsUI(groqKeyInput.value.trim());
+    }
   });
 
   DOM.modelSelect.addEventListener('change', () => {

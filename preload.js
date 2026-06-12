@@ -65,6 +65,35 @@ contextBridge.exposeInMainWorld('stealthAPI', {
     }
   },
 
+  getValidGroqModels: async (key) => {
+    try {
+      const fetch = require('node-fetch');
+      const response = await fetch(`https://api.groq.com/openai/v1/models`, {
+        headers: {
+          'Authorization': `Bearer ${key}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status}`);
+      }
+      const data = await response.json();
+      
+      const formatName = (id) => {
+        return id.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      };
+      
+      return data.data
+        .filter(m => m.active !== false) // some versions might omit active flag, but if it exists and is false, filter it out
+        .map(m => ({
+          id: m.id,
+          displayName: formatName(m.id)
+        }));
+    } catch (e) {
+      console.error('Failed to fetch Groq models:', e);
+      return [];
+    }
+  },
+
   // Gemini streaming (executed in preload using native Web Fetch)
   streamGemini: async ({ key, model, messages, context, onChunk, onDone, onError }) => {
     try {
