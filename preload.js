@@ -65,38 +65,9 @@ contextBridge.exposeInMainWorld('stealthAPI', {
     }
   },
 
-  getValidGroqModels: async (key) => {
-    try {
-      const fetch = require('node-fetch');
-      const response = await fetch(`https://api.groq.com/openai/v1/models`, {
-        headers: {
-          'Authorization': `Bearer ${key}`
-        }
-      });
-      if (!response.ok) {
-        throw new Error(`API Error: ${response.status}`);
-      }
-      const data = await response.json();
-      
-      const formatName = (id) => {
-        return id.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-      };
-      
-      return data.data
-        .filter(m => m.active !== false) // some versions might omit active flag, but if it exists and is false, filter it out
-        .map(m => ({
-          id: m.id,
-          displayName: formatName(m.id)
-        }));
-    } catch (e) {
-      console.error('Failed to fetch Groq models:', e);
-      return [];
-    }
-  },
-
   // Gemini streaming (executed in preload using native Web Fetch)
   streamGemini: async ({ key, model, messages, context, onChunk, onDone, onError }) => {
-    try {
+    const executeStream = async (modelStr) => {
       isCancelled = false;
       currentAbortController = new AbortController();
       const { GoogleGenerativeAI } = require('@google/generative-ai');
@@ -107,34 +78,32 @@ contextBridge.exposeInMainWorld('stealthAPI', {
         ? `${baseInstruction}\n\n--- USER BACKGROUND ---\n${context}\n--- END BACKGROUND ---`
         : baseInstruction;
 
-      const aiModel = genAI.getGenerativeModel({ model, systemInstruction });
+      const aiModel = genAI.getGenerativeModel({
+        model: modelStr,
+        systemInstruction,
+        generationConfig: { temperature: 0.3 }
+      });
 
-      // Build history excluding the latest user message
       const history = messages.slice(0, -1).map(m => {
-        let parts = [];
+        let parts = [{ text: m.content }];
         if (m.image) {
+          const base64Data = m.image.replace(/^data:image\/\w+;base64,/, '');
           parts.push({
-            inlineData: {
-              data: m.image,
-              mimeType: "image/jpeg"
-            }
+            inlineData: { data: base64Data, mimeType: 'image/jpeg' }
           });
         }
-        parts.push({ text: m.content });
         return {
-          role: m.role,
-          parts: parts
+          role: m.role === 'user' ? 'user' : 'model',
+          parts
         };
       });
 
       const latestMsg = messages[messages.length - 1];
-      let promptParts = [];
+      const promptParts = [];
       if (latestMsg.image) {
+        const base64Data = latestMsg.image.replace(/^data:image\/\w+;base64,/, '');
         promptParts.push({
-          inlineData: {
-            data: latestMsg.image,
-            mimeType: "image/jpeg"
-          }
+          inlineData: { data: base64Data, mimeType: 'image/jpeg' }
         });
       }
       promptParts.push({ text: latestMsg.content });
@@ -147,97 +116,130 @@ contextBridge.exposeInMainWorld('stealthAPI', {
         onChunk(chunk.text());
       }
       onDone();
+    };
+
+    try {
+      await executeStream(model);
     } catch (err) {
-      if (err.name === 'AbortError') {
+      if (err.name === 'AbortError' || isCancelled) {
         onDone();
         return;
       }
-      console.error(err);
       onError(err.message || 'Stream failed');
     }
   },
 
   streamGroq: ({ key, model, messages, context, onChunk, onDone, onError }) => {
     (async () => {
-      try {
-        isCancelled = false;
-        currentAbortController = new AbortController();
-        const fetch = require('node-fetch');
-        
-        let systemPrompt = "You are an expert interview assistant. The user is in a live interview. CRITICAL INSTRUCTIONS: 1. NEVER output dense paragraphs. Use well-defined, easy-to-read bullet points that the user can naturally read aloud to the interviewer. 2. For conceptual questions: Provide clear, easy-to-understand definitions in bullet points. 3. When asked for code: Provide the code in a markdown block, then provide a clear, step-by-step approach in bullet points that is detailed enough to fully satisfy an interviewer's expectations. 4. ALWAYS conclude with the Time Complexity and Space Complexity at the very end.";
-        if (context) {
-          systemPrompt += `\n\n--- USER BACKGROUND ---\n${context}\n--- END BACKGROUND ---`;
-        }
-        
-        // Convert 'model' role to 'assistant' for Groq/OpenAI format
-        const formattedMessages = [
-          { role: 'system', content: systemPrompt },
-          ...messages.map(m => ({
-            role: m.role === 'model' ? 'assistant' : m.role,
-            content: m.content
-          }))
-        ];
-
-        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${key}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            model: model,
-            messages: formattedMessages,
-            temperature: 0.3,
-            stream: true
-          }),
-          signal: currentAbortController.signal
-        });
-
-        if (!response.ok) {
-          const errorData = await response.text();
-          throw new Error(`Groq API Error: ${response.status} - ${errorData}`);
-        }
-
-        // Parse SSE stream
-        const stream = response.body;
-        stream.on('data', chunk => {
-          if (isCancelled) return;
-          const lines = chunk.toString().split('\n');
-          for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const dataStr = line.slice(6).trim();
-              if (dataStr === '[DONE]') continue;
-              try {
-                const data = JSON.parse(dataStr);
-                if (data.choices && data.choices[0].delta && data.choices[0].delta.content) {
-                  onChunk(data.choices[0].delta.content);
-                }
-              } catch (e) {
-                // Ignore parse errors on incomplete chunks
+      const executeStream = async (modelStr) => {
+        return new Promise(async (resolve, reject) => {
+          isCancelled = false;
+          currentAbortController = new AbortController();
+          const fetch = require('node-fetch');
+          
+          let systemPrompt = "You are an expert interview assistant. The user is in a live interview. CRITICAL INSTRUCTIONS: 1. NEVER output dense paragraphs. Use well-defined, easy-to-read bullet points that the user can naturally read aloud to the interviewer. 2. For conceptual questions: Provide clear, easy-to-understand definitions in bullet points. 3. When asked for code: Provide the code in a markdown block, then provide a clear, step-by-step approach in bullet points that is detailed enough to fully satisfy an interviewer's expectations. 4. ALWAYS conclude with the Time Complexity and Space Complexity at the very end.";
+          if (context) {
+            systemPrompt += `\n\n--- USER BACKGROUND ---\n${context}\n--- END BACKGROUND ---`;
+          }
+          
+          const formattedMessages = [
+            { role: 'system', content: systemPrompt },
+            ...messages.map(m => {
+              if (m.image) {
+                const base64Data = m.image.startsWith('data:') ? m.image : `data:image/jpeg;base64,${m.image}`;
+                return {
+                  role: m.role === 'model' ? 'assistant' : m.role,
+                  content: [
+                    { type: "text", text: m.content || "Analyze this image." },
+                    { type: "image_url", image_url: { url: base64Data } }
+                  ]
+                };
               }
+              return {
+                role: m.role === 'model' ? 'assistant' : m.role,
+                content: m.content
+              };
+            })
+          ];
+
+          try {
+            const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${key}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                model: modelStr,
+                messages: formattedMessages,
+                temperature: 0.3,
+                stream: true
+              }),
+              signal: currentAbortController.signal
+            });
+
+            if (!response.ok) {
+              const errorData = await response.text();
+              throw new Error(`Groq API Error: ${response.status} - ${errorData}`);
             }
+
+            const stream = response.body;
+            stream.on('data', chunk => {
+              if (isCancelled) return;
+              const lines = chunk.toString().split('\n');
+              for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                  const dataStr = line.slice(6).trim();
+                  if (dataStr === '[DONE]') continue;
+                  try {
+                    const data = JSON.parse(dataStr);
+                    if (data.choices && data.choices[0].delta && data.choices[0].delta.content) {
+                      onChunk(data.choices[0].delta.content);
+                    }
+                  } catch (e) {}
+                }
+              }
+            });
+
+            stream.on('end', () => {
+              onDone();
+              resolve();
+            });
+            
+            stream.on('error', (err) => {
+              if (err.name === 'AbortError' || isCancelled) {
+                onDone();
+                resolve();
+                return;
+              }
+              reject(err);
+            });
+          } catch (err) {
+            reject(err);
           }
         });
+      };
 
-        stream.on('end', () => {
-          onDone();
-        });
-        
-        stream.on('error', (err) => {
-          if (err.name === 'AbortError' || isCancelled) {
-            onDone();
-            return;
-          }
-          onError(err.message);
-        });
-
+      try {
+        await executeStream(model);
       } catch (error) {
         if (error.name === 'AbortError' || isCancelled) {
           onDone();
           return;
         }
-        console.error('Groq streaming error:', error);
-        onError(error.message || String(error));
+        const fallbackModel = 'llama-3.3-70b-versatile';
+        if (model !== fallbackModel) {
+          console.warn(`Groq model ${model} failed, falling back to ${fallbackModel}`, error);
+          try {
+            await executeStream(fallbackModel);
+          } catch (fallbackErr) {
+            console.error('Groq fallback error:', fallbackErr);
+            onError(fallbackErr.message || String(fallbackErr));
+          }
+        } else {
+          console.error('Groq streaming error:', error);
+          onError(error.message || String(error));
+        }
       }
     })();
   },
@@ -277,6 +279,9 @@ contextBridge.exposeInMainWorld('stealthAPI', {
 
   // Click-Through State Listener
   onClickThroughState: (callback) => ipcRenderer.on('app:clickThroughState', callback),
+
+  // Auto Capture Listener
+  onAutoCapture: (callback) => ipcRenderer.on('app:triggerAutoCapture', (event, base64Image) => callback(base64Image)),
 
   // Stealth Minimize Icon Mode Listener
   onStealthMinimizeState: (callback) => ipcRenderer.on('app:stealthMinimizeState', callback),

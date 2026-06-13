@@ -107,6 +107,25 @@ function createWindow() {
     }
   });
 
+  // ─── GLOBAL SHORTCUT: Silent Screenshot Capture (Shift+Space) ───────
+  globalShortcut.register('Shift+Space', async () => {
+    try {
+      // Capture primary screen silently
+      const sources = await desktopCapturer.getSources({ types: ['screen'], thumbnailSize: { width: 1920, height: 1080 } });
+      if (sources && sources.length > 0) {
+        // Find primary screen or just take the first one
+        const primarySource = sources[0]; 
+        const base64Image = primarySource.thumbnail.toDataURL(); // data:image/png;base64,...
+        
+        if (mainWindow) {
+          mainWindow.webContents.send('app:triggerAutoCapture', base64Image);
+        }
+      }
+    } catch (e) {
+      console.error('Silent capture failed:', e);
+    }
+  });
+
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
