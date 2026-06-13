@@ -713,7 +713,7 @@ function initSettings() {
       groqModels.style.display = 'none';
       geminiModels.style.display = 'block';
       if (!DOM.modelSelect.value.includes('gemini')) {
-        DOM.modelSelect.value = 'gemini-2.5-flash';
+        DOM.modelSelect.value = 'gemini-2.5-pro';
         localStorage.setItem(KEYS.MODEL, DOM.modelSelect.value);
       }
     }

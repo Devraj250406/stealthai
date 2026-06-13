@@ -54,19 +54,20 @@ let isCancelled = false;
 const ModelRegistry = {
   gemini: {
     models: [
-      { id: 'gemini-2.5-pro', displayName: 'Gemini 2.5 Pro', healthy: true, vision: true, errorCount: 0, lastError: null, cooldownUntil: 0 },
-      { id: 'gemini-2.5-flash', displayName: 'Gemini 2.5 Flash', healthy: true, vision: true, errorCount: 0, lastError: null, cooldownUntil: 0 },
-      { id: 'gemini-2.5-flash-lite-preview-06-17', displayName: 'Gemini 2.5 Flash Lite', healthy: true, vision: true, errorCount: 0, lastError: null, cooldownUntil: 0 },
-      { id: 'gemini-2.0-flash', displayName: 'Gemini 2.0 Flash', healthy: true, vision: true, errorCount: 0, lastError: null, cooldownUntil: 0 },
-      { id: 'gemini-1.5-flash', displayName: 'Gemini 1.5 Flash', healthy: true, vision: true, errorCount: 0, lastError: null, cooldownUntil: 0 },
+      { id: 'gemini-2.5-pro', displayName: 'Gemini 2.5 Pro', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
+      { id: 'gemini-3.0-flash', displayName: 'Gemini 3 Flash', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
+      { id: 'gemini-2.5-flash', displayName: 'Gemini 2.5 Flash', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
+      { id: 'gemini-3.1-flash-lite', displayName: 'Gemini 3.1 Flash Lite', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
+      { id: 'gemini-2.5-flash-lite', displayName: 'Gemini 2.5 Flash Lite', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
+      { id: 'gemini-2.0-flash', displayName: 'Gemini 2.0 Flash', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
     ]
   },
   groq: {
     models: [
-      { id: 'meta-llama/llama-4-scout-17b-16e-instruct', displayName: 'Llama 4 Scout 17B', healthy: true, vision: true, errorCount: 0, lastError: null, cooldownUntil: 0 },
-      { id: 'meta-llama/llama-4-maverick-17b-128e-instruct', displayName: 'Llama 4 Maverick 17B', healthy: true, vision: true, errorCount: 0, lastError: null, cooldownUntil: 0 },
-      { id: 'llama-3.3-70b-versatile', displayName: 'Llama 3.3 70B', healthy: true, vision: false, errorCount: 0, lastError: null, cooldownUntil: 0 },
-      { id: 'llama-3.1-8b-instant', displayName: 'Llama 3.1 8B', healthy: true, vision: false, errorCount: 0, lastError: null, cooldownUntil: 0 },
+      { id: 'meta-llama/llama-4-scout-17b-16e-instruct', displayName: 'Llama 4 Scout 17B', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
+      { id: 'meta-llama/llama-4-maverick-17b-128e-instruct', displayName: 'Llama 4 Maverick 17B', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
+      { id: 'llama-3.3-70b-versatile', displayName: 'Llama 3.3 70B', healthy: true, vision: false, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
+      { id: 'llama-3.1-8b-instant', displayName: 'Llama 3.1 8B', healthy: true, vision: false, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
     ]
   }
 };
@@ -310,6 +311,17 @@ async function streamWithFallbackInternal({ geminiKey, groqKey, preferredProvide
   const primaryProvider = preferredProvider;
   const secondaryProvider = preferredProvider === 'gemini' ? 'groq' : 'gemini';
 
+  const getModelScore = (m) => {
+    const successRate = (m.successCount + m.errorCount) > 0 ? (m.successCount / (m.successCount + m.errorCount)) : 1;
+    const avgResponseTime = m.successCount > 0 ? (m.totalResponseTime / m.successCount) : 1000;
+    let score = 1000;
+    score -= (m.errorCount * 200);
+    score += (successRate * 500);
+    score -= (avgResponseTime / 100);
+    return score;
+  };
+  const sortModelsByHealth = (a, b) => getModelScore(b) - getModelScore(a);
+
   const chain = [];
 
   // 1. Try the user's selected model first (if healthy)
@@ -320,14 +332,14 @@ async function streamWithFallbackInternal({ geminiKey, groqKey, preferredProvide
     }
   }
 
-  // 2. Add remaining healthy models from primary provider, sorted by health (least errors first)
+  // 2. Add remaining healthy models from primary provider, sorted by health
   const primaryModels = getHealthyModels(primaryProvider, hasImage).filter(m => m.id !== preferredModel);
-  primaryModels.sort((a, b) => a.errorCount - b.errorCount);
+  primaryModels.sort(sortModelsByHealth);
   primaryModels.forEach(m => chain.push({ provider: primaryProvider, model: m.id, vision: m.vision }));
 
   // 3. Add healthy models from secondary provider (cross-provider fallback), sorted by health
   const secondaryModels = getHealthyModels(secondaryProvider, hasImage);
-  secondaryModels.sort((a, b) => a.errorCount - b.errorCount);
+  secondaryModels.sort(sortModelsByHealth);
   secondaryModels.forEach(m => chain.push({ provider: secondaryProvider, model: m.id, vision: m.vision }));
 
   // 4. If image required but NO vision models are available, try text models as an absolute last resort.
@@ -335,11 +347,11 @@ async function streamWithFallbackInternal({ geminiKey, groqKey, preferredProvide
   if (chain.length === 0 && hasImage) {
     logFallback(`[WARNING] No healthy vision models available. Falling back to stripping image and using text models.`);
     const primaryTextModels = getHealthyModels(primaryProvider, false);
-    primaryTextModels.sort((a, b) => a.errorCount - b.errorCount);
+    primaryTextModels.sort(sortModelsByHealth);
     primaryTextModels.forEach(m => chain.push({ provider: primaryProvider, model: m.id, vision: false }));
 
     const secondaryTextModels = getHealthyModels(secondaryProvider, false);
-    secondaryTextModels.sort((a, b) => a.errorCount - b.errorCount);
+    secondaryTextModels.sort(sortModelsByHealth);
     secondaryTextModels.forEach(m => chain.push({ provider: secondaryProvider, model: m.id, vision: false }));
   }
 
@@ -362,13 +374,23 @@ async function streamWithFallbackInternal({ geminiKey, groqKey, preferredProvide
 
     try {
       logFallback(`Executing target -> Provider: ${provider} | Model: ${model}`);
+      const startTime = Date.now();
+      
       if (provider === 'gemini') {
         await executeGeminiStream(key, model, vision, messages, systemPrompt, onChunk);
       } else {
         await executeGroqStream(key, model, vision, messages, systemPrompt, onChunk);
       }
+      
+      const responseTime = Date.now() - startTime;
+      const entry = ModelRegistry[provider]?.models.find(m => m.id === model);
+      if (entry) {
+        entry.successCount++;
+        entry.totalResponseTime += responseTime;
+      }
+
       // Success! We're done.
-      logFallback(`Successfully completed stream using ${provider}/${model}.`);
+      logFallback(`Successfully completed stream using ${provider}/${model} in ${responseTime}ms.`);
       onDone();
       return;
     } catch (err) {
