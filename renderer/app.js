@@ -55,7 +55,7 @@ const state = {
   audioAnalyser: null,
   meterAnimId: null,
   pendingScreenshot: null, // base64 string
-  validGeminiModels: null, // array of validated model strings
+  screenshotHistory: [],   // last 10 screenshots
 };
 
 // ─── Storage Keys ──────────────────────────────────────────────────
@@ -187,24 +187,17 @@ async function sendMessage() {
   const geminiKey = DOM.apiKeyInput.value.trim();
   const groqKey = document.getElementById('groq-api-key-input').value.trim();
 
-  if (provider === 'gemini' && !geminiKey) {
-    showError('Please enter your Gemini API key in the Config tab.');
-    return;
-  }
-  if (provider === 'groq' && !groqKey) {
-    showError('Please enter your Groq API key in the Config tab.');
-    return;
-  }
-
-  if (provider === 'gemini' && state.validGeminiModels && !state.validGeminiModels.includes(DOM.modelSelect.value)) {
-    showError(`Error: The model ${DOM.modelSelect.value} is not supported or was deprecated by Google. Please select a valid model.`);
+  // Need at least one key
+  if (!geminiKey && !groqKey) {
+    showError('Please enter at least one API key (Gemini or Groq) in the Config tab.');
     return;
   }
 
   // Add user message
   const msgObj = { role: 'user', content: text };
-  if (state.pendingScreenshot) {
-    msgObj.image = state.pendingScreenshot;
+  const currentScreenshot = state.pendingScreenshot;
+  if (currentScreenshot) {
+    msgObj.image = currentScreenshot;
   }
   state.messages.push(msgObj);
   
@@ -219,9 +212,9 @@ async function sendMessage() {
   const body = document.createElement('div');
   body.className = 'message-body';
   
-  if (state.pendingScreenshot) {
+  if (currentScreenshot) {
     const imgElement = document.createElement('img');
-    imgElement.src = `data:image/jpeg;base64,${state.pendingScreenshot}`;
+    imgElement.src = currentScreenshot.startsWith('data:') ? currentScreenshot : `data:image/jpeg;base64,${currentScreenshot}`;
     imgElement.style.maxWidth = '100%';
     imgElement.style.borderRadius = '8px';
     imgElement.style.marginBottom = '8px';
@@ -237,6 +230,10 @@ async function sendMessage() {
   DOM.chatMessages.appendChild(wrapper);
   
   state.pendingScreenshot = null; // reset for next msg
+  
+  // Clear image preview
+  const previewArea = document.getElementById('image-preview-area');
+  if (previewArea) { previewArea.innerHTML = ''; previewArea.style.display = 'none'; }
   
   DOM.chatInput.value = '';
   autoResizeInput();
@@ -255,24 +252,32 @@ async function sendMessage() {
 
   function finishStream(body) {
     body.classList.remove('streaming-cursor');
-    state.messages.push({ role: 'model', content: state.streamBuffer });
+    const modelResponse = state.streamBuffer;
+    state.messages.push({ role: 'model', content: modelResponse });
     saveChatHistory();
     state.isStreaming = false;
     state.streamBuffer = '';
     DOM.btnSend.disabled = false;
     DOM.btnSend.style.display = 'block';
     if (DOM.btnStop) DOM.btnStop.style.display = 'none';
+    
+    // Save to screenshot history if this was a screenshot message
+    if (currentScreenshot) {
+      saveToScreenshotHistory(currentScreenshot, text, modelResponse);
+    }
   }
 
-  const payload = {
-    key: provider === 'groq' ? groqKey : geminiKey,
-    model: DOM.modelSelect.value,
+  // Use the unified fallback engine
+  window.stealthAPI.streamWithFallback({
+    geminiKey,
+    groqKey,
+    preferredProvider: provider,
+    preferredModel: DOM.modelSelect.value,
     messages: state.messages,
     context: DOM.contextTextarea.value.trim(),
     onChunk: (chunk) => {
       state.streamBuffer += chunk;
       
-      // Auto-close unclosed markdown code blocks so `marked` doesn't strip newlines during streaming
       let renderText = state.streamBuffer;
       const backtickCount = (renderText.match(/```/g) || []).length;
       if (backtickCount % 2 !== 0) {
@@ -297,13 +302,59 @@ async function sendMessage() {
       }
       showError(error);
     }
-  };
+  });
+}
 
-  if (provider === 'groq') {
-    await window.stealthAPI.streamGroq(payload);
-  } else {
-    await window.stealthAPI.streamGemini(payload);
+// ─── Screenshot History ──────────────────────────────────────────
+const SCREENSHOT_HISTORY_KEY = 'stealthai_screenshot_history';
+
+function saveToScreenshotHistory(image, prompt, answer) {
+  try {
+    const history = JSON.parse(localStorage.getItem(SCREENSHOT_HISTORY_KEY) || '[]');
+    // Create a small thumbnail (just store a truncated version to save space)
+    const thumbnail = image.length > 5000 ? image.substring(0, 5000) : image;
+    history.unshift({
+      timestamp: Date.now(),
+      thumbnail,
+      fullImage: image,
+      prompt,
+      answer: answer.substring(0, 500) // truncate answer for storage
+    });
+    // Keep only last 10
+    while (history.length > 10) history.pop();
+    localStorage.setItem(SCREENSHOT_HISTORY_KEY, JSON.stringify(history));
+    renderScreenshotHistory();
+  } catch (e) {
+    console.warn('Failed to save screenshot history:', e);
   }
+}
+
+function renderScreenshotHistory() {
+  const container = document.getElementById('screenshot-history');
+  if (!container) return;
+  const history = JSON.parse(localStorage.getItem(SCREENSHOT_HISTORY_KEY) || '[]');
+  if (history.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+  container.style.display = 'block';
+  container.innerHTML = '<div class="screenshot-history-label">Recent Screenshots</div><div class="screenshot-history-strip"></div>';
+  const strip = container.querySelector('.screenshot-history-strip');
+  history.forEach((entry, idx) => {
+    const thumb = document.createElement('div');
+    thumb.className = 'screenshot-thumb';
+    thumb.title = `${new Date(entry.timestamp).toLocaleTimeString()} — Click to re-analyze`;
+    const img = document.createElement('img');
+    img.src = entry.fullImage.startsWith('data:') ? entry.fullImage : `data:image/jpeg;base64,${entry.fullImage}`;
+    thumb.appendChild(img);
+    thumb.addEventListener('click', () => {
+      state.pendingScreenshot = entry.fullImage;
+      DOM.chatInput.value = entry.prompt || 'Solve the problem in this screenshot.';
+      autoResizeInput();
+      sendMessage();
+    });
+    strip.appendChild(thumb);
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -652,7 +703,7 @@ function initSettings() {
       geminiContainer.style.display = 'none';
       groqModels.style.display = 'block';
       geminiModels.style.display = 'none';
-      if (!DOM.modelSelect.value.includes('llama') && !DOM.modelSelect.value.includes('mixtral')) {
+      if (!DOM.modelSelect.value.includes('llama')) {
         DOM.modelSelect.value = 'llama-3.3-70b-versatile';
         localStorage.setItem(KEYS.MODEL, DOM.modelSelect.value);
       }
@@ -661,63 +712,85 @@ function initSettings() {
       geminiContainer.style.display = 'block';
       groqModels.style.display = 'none';
       geminiModels.style.display = 'block';
-      if (!DOM.modelSelect.value.includes('gemini') && !DOM.modelSelect.value.includes('gemma')) {
+      if (!DOM.modelSelect.value.includes('gemini')) {
         DOM.modelSelect.value = 'gemini-2.5-flash';
         localStorage.setItem(KEYS.MODEL, DOM.modelSelect.value);
       }
     }
     
-    // Force the custom dropdown to refresh its visual label and state
     DOM.modelSelect.dispatchEvent(new Event('change'));
-    
-    if (provider === 'gemini') {
-      refreshGeminiModelsUI(DOM.apiKeyInput.value.trim());
-    }
   }
 
-  async function refreshGeminiModelsUI(key) {
-    if (!key) return;
-    const modelObjs = await window.stealthAPI.getValidGeminiModels(key);
-    if (modelObjs.length > 0) {
-      state.validGeminiModels = modelObjs.map(m => m.id);
-      
-      // Clear any existing options and rebuild dynamically
+  // ─── Startup Model Discovery ─────────────────────────────────
+  async function runModelDiscovery() {
+    const geminiKey = DOM.apiKeyInput.value.trim();
+    const groqKey = groqKeyInput.value.trim();
+    if (!geminiKey && !groqKey) return;
+
+    const result = await window.stealthAPI.discoverAndValidateModels(geminiKey, groqKey);
+
+    // Update Gemini dropdown dynamically
+    if (result.gemini.length > 0) {
       geminiModels.innerHTML = '';
-      
-      let firstValid = null;
-      modelObjs.forEach(m => {
+      result.gemini.forEach(m => {
         const opt = document.createElement('option');
         opt.value = m.id;
         opt.textContent = m.displayName;
         geminiModels.appendChild(opt);
-        if (!firstValid) firstValid = m.id;
       });
-
-      // If currently selected model is suddenly invalid, fallback to first valid one
-      if (DOM.modelSelect.value.includes('gemini') || DOM.modelSelect.value.includes('gemma') || !DOM.modelSelect.value) {
-        if (!state.validGeminiModels.includes(DOM.modelSelect.value) && firstValid) {
-           DOM.modelSelect.value = firstValid;
-           localStorage.setItem(KEYS.MODEL, firstValid);
-        }
-      }
-      geminiModels.label = "Gemini Models (Validated)";
-      DOM.modelSelect.dispatchEvent(new Event('change'));
+      geminiModels.label = 'Gemini Models (Validated)';
     }
+
+    // Update Groq dropdown — hide unhealthy models
+    if (result.groq.length > 0) {
+      const validGroqIds = result.groq.map(m => m.id);
+      Array.from(groqModels.querySelectorAll('option')).forEach(opt => {
+        if (!validGroqIds.includes(opt.value)) {
+          opt.style.display = 'none';
+          opt.disabled = true;
+        } else {
+          opt.style.display = 'block';
+          opt.disabled = false;
+        }
+      });
+      groqModels.label = 'Groq Models (Validated)';
+    }
+
+    // Re-check if current selection is still valid
+    const provider = providerSelect.value;
+    if (provider === 'gemini' && result.gemini.length > 0) {
+      const validIds = result.gemini.map(m => m.id);
+      if (!validIds.includes(DOM.modelSelect.value)) {
+        DOM.modelSelect.value = validIds[0];
+        localStorage.setItem(KEYS.MODEL, validIds[0]);
+      }
+    }
+    if (provider === 'groq' && result.groq.length > 0) {
+      const validIds = result.groq.map(m => m.id);
+      if (!validIds.includes(DOM.modelSelect.value)) {
+        DOM.modelSelect.value = validIds[0];
+        localStorage.setItem(KEYS.MODEL, validIds[0]);
+      }
+    }
+
+    DOM.modelSelect.dispatchEvent(new Event('change'));
   }
 
   providerSelect.addEventListener('change', updateProviderUI);
   updateProviderUI(); // init run
 
-  // Auto-save on change
+  // Run discovery on startup
+  runModelDiscovery();
+
+  // Auto-save on change + re-discover
   DOM.apiKeyInput.addEventListener('input', () => {
     localStorage.setItem(KEYS.API_KEY, DOM.apiKeyInput.value.trim());
-    if (providerSelect.value === 'gemini') {
-      refreshGeminiModelsUI(DOM.apiKeyInput.value.trim());
-    }
+    runModelDiscovery();
   });
 
   groqKeyInput.addEventListener('input', () => {
     localStorage.setItem('stealth_groq_api_key', groqKeyInput.value.trim());
+    runModelDiscovery();
   });
 
   DOM.modelSelect.addEventListener('change', () => {
@@ -736,6 +809,9 @@ function initSettings() {
     DOM.transcriptFeed.innerHTML = '<div class="empty-state small"><p>Live transcript will appear here.</p></div>';
     DOM.btnSendTranscript.disabled = true;
   });
+
+  // Render screenshot history on load
+  renderScreenshotHistory();
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -769,12 +845,15 @@ function initUI() {
       }
       autoResizeInput();
       
-      // Update UI to show image is attached
-      const preview = document.createElement('img');
-      preview.src = base64Image;
-      DOM.imagePreviewArea.innerHTML = '';
-      DOM.imagePreviewArea.appendChild(preview);
-      DOM.imagePreviewArea.style.display = 'block';
+      // Update UI to show image is attached (briefly, before auto-send clears it)
+      const previewArea = document.getElementById('image-preview-area');
+      if (previewArea) {
+        const preview = document.createElement('img');
+        preview.src = base64Image;
+        previewArea.innerHTML = '';
+        previewArea.appendChild(preview);
+        previewArea.style.display = 'block';
+      }
 
       // Automatically send
       sendMessage();

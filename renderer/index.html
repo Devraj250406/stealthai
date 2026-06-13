@@ -53,7 +53,9 @@
         <p class="empty-hint">Tip: Paste your resume in the Context tab first.</p>
       </div>
     </div>
+    <div id="screenshot-history" style="display: none;"></div>
     <div id="chat-input-area">
+      <div id="image-preview-area" style="display: none;"></div>
       <div class="input-row">
         <textarea id="chat-input" placeholder="Ask anything…" rows="1"></textarea>
         <button id="btn-send" title="Send  ↵">
@@ -144,14 +146,13 @@
     <div class="settings-section">
       <label class="settings-label">Model</label>
       <select id="model-select" class="form-select">
-        <!-- Groq Models (Default) -->
         <optgroup label="Groq Models" id="groq-models">
-          <option value="llama-4-scout-17b-vision">Llama 4 Scout 17B Vision</option>
+          <option value="meta-llama/llama-4-scout-17b-16e-instruct">Llama 4 Scout 17B</option>
+          <option value="meta-llama/llama-4-maverick-17b-128e-instruct">Llama 4 Maverick 17B</option>
           <option value="llama-3.3-70b-versatile">Llama 3.3 70B</option>
           <option value="llama-3.1-8b-instant">Llama 3.1 8B</option>
-          <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
         </optgroup>
-        <!-- Gemini Models -->
+        <!-- Gemini Models (populated dynamically) -->
         <optgroup label="Gemini Models" id="gemini-models" style="display: none;">
         </optgroup>
       </select>
@@ -159,8 +160,10 @@
 
     <div class="settings-section">
       <label class="settings-label">Keyboard Shortcuts</label>
+      <div class="shortcut-row"><kbd>⇧ Space</kbd><span>Silent Screenshot → Auto-Analyze</span></div>
       <div class="shortcut-row"><kbd>⌘ ⌥ S</kbd><span>Toggle overlay visibility</span></div>
       <div class="shortcut-row"><kbd>⌘ ⌥ T</kbd><span>Toggle Click-Through (Stealth Mode)</span></div>
+      <div class="shortcut-row"><kbd>⌘ ⌥ M</kbd><span>Stealth Minimize (Icon Mode)</span></div>
       <div class="shortcut-row"><kbd>⌘ ↵</kbd><span>Send message</span></div>
       <div class="shortcut-row"><kbd>Esc</kbd><span>Stop streaming</span></div>
     </div>
