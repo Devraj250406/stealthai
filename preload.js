@@ -54,20 +54,20 @@ let isCancelled = false;
 const ModelRegistry = {
   gemini: {
     models: [
-      { id: 'gemini-2.5-pro', displayName: 'Gemini 2.5 Pro', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
-      { id: 'gemini-3.0-flash', displayName: 'Gemini 3 Flash', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
-      { id: 'gemini-2.5-flash', displayName: 'Gemini 2.5 Flash', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
-      { id: 'gemini-3.1-flash-lite', displayName: 'Gemini 3.1 Flash Lite', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
-      { id: 'gemini-2.5-flash-lite', displayName: 'Gemini 2.5 Flash Lite', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
-      { id: 'gemini-2.0-flash', displayName: 'Gemini 2.0 Flash', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
+      { id: 'gemini-2.5-pro', displayName: 'Gemini 2.5 Pro', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0, requestsRemaining: 2, requestsLimit: 2, tokensRemaining: 32000, tokensLimit: 32000, resetAt: null, rateLimitStatus: 'healthy', dataSource: 'Tracked', requestTimestamps: [], tokenUsage: [] },
+      { id: 'gemini-3.0-flash', displayName: 'Gemini 3 Flash', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0, requestsRemaining: 15, requestsLimit: 15, tokensRemaining: 1000000, tokensLimit: 1000000, resetAt: null, rateLimitStatus: 'healthy', dataSource: 'Tracked', requestTimestamps: [], tokenUsage: [] },
+      { id: 'gemini-2.5-flash', displayName: 'Gemini 2.5 Flash', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0, requestsRemaining: 15, requestsLimit: 15, tokensRemaining: 1000000, tokensLimit: 1000000, resetAt: null, rateLimitStatus: 'healthy', dataSource: 'Tracked', requestTimestamps: [], tokenUsage: [] },
+      { id: 'gemini-3.1-flash-lite', displayName: 'Gemini 3.1 Flash Lite', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0, requestsRemaining: 15, requestsLimit: 15, tokensRemaining: 1000000, tokensLimit: 1000000, resetAt: null, rateLimitStatus: 'healthy', dataSource: 'Tracked', requestTimestamps: [], tokenUsage: [] },
+      { id: 'gemini-2.5-flash-lite', displayName: 'Gemini 2.5 Flash Lite', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0, requestsRemaining: 15, requestsLimit: 15, tokensRemaining: 1000000, tokensLimit: 1000000, resetAt: null, rateLimitStatus: 'healthy', dataSource: 'Tracked', requestTimestamps: [], tokenUsage: [] },
+      { id: 'gemini-2.0-flash', displayName: 'Gemini 2.0 Flash', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0, requestsRemaining: 15, requestsLimit: 15, tokensRemaining: 1000000, tokensLimit: 1000000, resetAt: null, rateLimitStatus: 'healthy', dataSource: 'Tracked', requestTimestamps: [], tokenUsage: [] },
     ]
   },
   groq: {
     models: [
-      { id: 'meta-llama/llama-4-scout-17b-16e-instruct', displayName: 'Llama 4 Scout 17B', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
-      { id: 'meta-llama/llama-4-maverick-17b-128e-instruct', displayName: 'Llama 4 Maverick 17B', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
-      { id: 'llama-3.3-70b-versatile', displayName: 'Llama 3.3 70B', healthy: true, vision: false, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
-      { id: 'llama-3.1-8b-instant', displayName: 'Llama 3.1 8B', healthy: true, vision: false, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0 },
+      { id: 'meta-llama/llama-4-scout-17b-16e-instruct', displayName: 'Llama 4 Scout 17B', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0, requestsRemaining: null, requestsLimit: null, tokensRemaining: null, tokensLimit: null, resetAt: null, rateLimitStatus: 'healthy', dataSource: 'Provider' },
+      { id: 'meta-llama/llama-4-maverick-17b-128e-instruct', displayName: 'Llama 4 Maverick 17B', healthy: true, vision: true, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0, requestsRemaining: null, requestsLimit: null, tokensRemaining: null, tokensLimit: null, resetAt: null, rateLimitStatus: 'healthy', dataSource: 'Provider' },
+      { id: 'llama-3.3-70b-versatile', displayName: 'Llama 3.3 70B', healthy: true, vision: false, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0, requestsRemaining: null, requestsLimit: null, tokensRemaining: null, tokensLimit: null, resetAt: null, rateLimitStatus: 'healthy', dataSource: 'Provider' },
+      { id: 'llama-3.1-8b-instant', displayName: 'Llama 3.1 8B', healthy: true, vision: false, errorCount: 0, successCount: 0, totalResponseTime: 0, lastError: null, cooldownUntil: 0, requestsRemaining: null, requestsLimit: null, tokensRemaining: null, tokensLimit: null, resetAt: null, rateLimitStatus: 'healthy', dataSource: 'Provider' },
     ]
   }
 };
@@ -95,7 +95,13 @@ function markModelUnhealthy(provider, modelId, error) {
   else if (errStr.includes('429') || errStr.includes('rate') || errStr.includes('quota')) {
     entry.cooldownUntil = Date.now() + 60000;
     entry.lastError = 'rate_limited';
-    logFallback(`[INFO] Rate limit on ${modelId}. Cooldown 60s.`);
+    
+    // Force Rate Limit tracking exhaustion
+    entry.requestsRemaining = 0;
+    entry.rateLimitStatus = 'exhausted';
+    entry.resetAt = new Date(entry.cooldownUntil).toISOString();
+    
+    logFallback(`[INFO] Rate limit on ${modelId}. Cooldown 60s. Marked as exhausted.`);
   }
   // Server errors (500, 502, 503, 520) — cooldown 15 seconds
   else {
@@ -174,45 +180,154 @@ function preprocessImage(base64Input) {
 // ═══════════════════════════════════════════════════════════════════
 
 async function executeGeminiStream(key, modelStr, isVision, messages, systemPrompt, onChunk) {
-  isCancelled = false;
-  currentAbortController = new AbortController();
-  const { GoogleGenerativeAI } = require('@google/generative-ai');
-  const genAI = new GoogleGenerativeAI(key);
+  return new Promise(async (resolve, reject) => {
+    isCancelled = false;
+    currentAbortController = new AbortController();
+    const fetch = require('node-fetch');
 
-  const aiModel = genAI.getGenerativeModel({
-    model: modelStr,
-    systemInstruction: systemPrompt,
-    generationConfig: { temperature: 0.3 }
-  });
-
-  const history = messages.slice(0, -1).map(m => {
-    let parts = [{ text: m.content || "[Image Omitted]" }];
-    if (m.image && isVision) {
-      parts.push({
-        inlineData: { data: preprocessImage(m.image), mimeType: 'image/jpeg' }
-      });
-    }
-    return {
-      role: m.role === 'user' ? 'user' : 'model',
-      parts
-    };
-  });
-
-  const latestMsg = messages[messages.length - 1];
-  const promptParts = [];
-  if (latestMsg.image && isVision) {
-    promptParts.push({
-      inlineData: { data: preprocessImage(latestMsg.image), mimeType: 'image/jpeg' }
+    const contents = messages.map(m => {
+      let parts = [{ text: m.content || "[Image Omitted: Model does not support vision]" }];
+      if (m.image && isVision) {
+        parts.push({
+          inlineData: { data: preprocessImage(m.image), mimeType: 'image/jpeg' }
+        });
+        parts[0].text = m.content || "Analyze this image.";
+      }
+      return {
+        role: m.role === 'user' ? 'user' : 'model',
+        parts
+      };
     });
+
+    try {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelStr}:streamGenerateContent?alt=sse&key=${key}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: systemPrompt }] },
+          contents: contents,
+          generationConfig: { temperature: 0.3 }
+        }),
+        signal: currentAbortController.signal
+      });
+
+      // Gemini headers might not be as explicit, but we check if they exist
+      updateRateLimits('gemini', modelStr, response.headers);
+
+      let totalTokens = 0;
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(`Gemini API Error: ${response.status} - ${errorData}`);
+      }
+
+      // Track the RPM request count
+      trackGeminiUsage(modelStr, 0);
+
+      const stream = response.body;
+      stream.on('data', chunk => {
+        if (isCancelled) return;
+        const lines = chunk.toString().split('\n');
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const dataStr = line.slice(6).trim();
+            if (!dataStr) continue;
+            try {
+              const data = JSON.parse(dataStr);
+              if (data.usageMetadata && data.usageMetadata.totalTokenCount) {
+                totalTokens = data.usageMetadata.totalTokenCount;
+              }
+              if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
+                const textChunk = data.candidates[0].content.parts[0].text;
+                if (textChunk) onChunk(textChunk);
+              }
+            } catch (e) {}
+          }
+        }
+      });
+
+      stream.on('end', () => {
+        if (totalTokens > 0) {
+           trackGeminiUsage(modelStr, totalTokens);
+        }
+        resolve();
+      });
+      stream.on('error', err => reject(err));
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
+function cleanGeminiSlidingWindows(entry) {
+  if (entry.dataSource !== 'Tracked') return;
+  const oneMinAgo = Date.now() - 60000;
+  
+  entry.requestTimestamps = entry.requestTimestamps.filter(ts => ts > oneMinAgo);
+  entry.tokenUsage = entry.tokenUsage.filter(t => t.ts > oneMinAgo);
+  
+  const currentTokens = entry.tokenUsage.reduce((acc, curr) => acc + curr.amount, 0);
+  
+  entry.requestsRemaining = Math.max(0, entry.requestsLimit - entry.requestTimestamps.length);
+  entry.tokensRemaining = Math.max(0, entry.tokensLimit - currentTokens);
+
+  if (entry.requestsRemaining <= 0 || entry.tokensRemaining <= 0) {
+    entry.rateLimitStatus = 'exhausted';
+  } else if (entry.requestsRemaining <= entry.requestsLimit * 0.2) {
+    entry.rateLimitStatus = 'warning';
+  } else {
+    entry.rateLimitStatus = 'healthy';
   }
-  promptParts.push({ text: latestMsg.content || "[Image Omitted]" });
+}
 
-  const chat = aiModel.startChat({ history });
-  const result = await chat.sendMessageStream(promptParts);
+function trackGeminiUsage(modelId, estimatedTokens) {
+  const entry = ModelRegistry.gemini.models.find(m => m.id === modelId);
+  if (!entry) return;
+  
+  entry.requestTimestamps.push(Date.now());
+  entry.tokenUsage.push({ ts: Date.now(), amount: estimatedTokens });
+  cleanGeminiSlidingWindows(entry);
+}
 
-  for await (const chunk of result.stream) {
-    if (isCancelled) break;
-    onChunk(chunk.text());
+function updateRateLimits(provider, modelId, headers) {
+  const entry = ModelRegistry[provider]?.models.find(m => m.id === modelId);
+  if (!entry) return;
+
+  if (provider === 'gemini') {
+    cleanGeminiSlidingWindows(entry);
+    return;
+  }
+
+  if (!headers) return;
+  if (provider === 'groq') {
+    const reqRem = headers.get('x-ratelimit-remaining-requests');
+    const reqLim = headers.get('x-ratelimit-limit-requests');
+    const tokRem = headers.get('x-ratelimit-remaining-tokens');
+    const tokLim = headers.get('x-ratelimit-limit-tokens');
+    const resetReq = headers.get('x-ratelimit-reset-requests');
+
+    if (reqRem !== null) entry.requestsRemaining = parseInt(reqRem, 10);
+    if (reqLim !== null) entry.requestsLimit = parseInt(reqLim, 10);
+    if (tokRem !== null) entry.tokensRemaining = parseInt(tokRem, 10);
+    if (tokLim !== null) entry.tokensLimit = parseInt(tokLim, 10);
+
+    if (resetReq) {
+      let ms = 0;
+      const hMatch = resetReq.match(/(\d+(?:\.\d+)?)h/);
+      const mMatch = resetReq.match(/(\d+(?:\.\d+)?)m/);
+      const sMatch = resetReq.match(/(\d+(?:\.\d+)?)s/);
+      if (hMatch) ms += parseFloat(hMatch[1]) * 3600000;
+      if (mMatch) ms += parseFloat(mMatch[1]) * 60000;
+      if (sMatch) ms += parseFloat(sMatch[1]) * 1000;
+      if (ms > 0) entry.resetAt = new Date(Date.now() + ms).toISOString();
+    }
+  }
+
+  if (entry.requestsRemaining !== null && entry.requestsLimit !== null) {
+    const ratio = entry.requestsRemaining / entry.requestsLimit;
+    if (ratio <= 0) entry.rateLimitStatus = 'exhausted';
+    else if (ratio <= 0.2) entry.rateLimitStatus = 'warning';
+    else entry.rateLimitStatus = 'healthy';
   }
 }
 
@@ -225,8 +340,6 @@ async function executeGroqStream(key, modelStr, isVision, messages, systemPrompt
     const formattedMessages = [
       { role: 'system', content: systemPrompt },
       ...messages.map(m => {
-        // If the model DOES NOT support vision, we MUST strip the image completely.
-        // Sending an image_url object to a text-only model causes 400 'must be a string'.
         if (!isVision || !m.image) {
           return {
             role: m.role === 'model' ? 'assistant' : m.role,
@@ -234,7 +347,6 @@ async function executeGroqStream(key, modelStr, isVision, messages, systemPrompt
           };
         }
         
-        // Model DOES support vision AND we have an image
         const base64Data = m.image.startsWith('data:') ? m.image : `data:image/jpeg;base64,${m.image}`;
         return {
           role: m.role === 'model' ? 'assistant' : m.role,
@@ -261,6 +373,8 @@ async function executeGroqStream(key, modelStr, isVision, messages, systemPrompt
         }),
         signal: currentAbortController.signal
       });
+
+      updateRateLimits('groq', modelStr, response.headers);
 
       if (!response.ok) {
         const errorData = await response.text();
@@ -440,6 +554,47 @@ contextBridge.exposeInMainWorld('stealthAPI', {
         vision: m.vision,
         lastError: m.lastError
       }))
+    };
+  },
+
+  getRateLimits: () => {
+    return {
+      providers: [
+        {
+          provider: 'gemini',
+          models: ModelRegistry.gemini.models.map(m => ({
+            id: m.id,
+            displayName: m.displayName,
+            requestsRemaining: m.requestsRemaining,
+            requestsLimit: m.requestsLimit,
+            tokensRemaining: m.tokensRemaining,
+            tokensLimit: m.tokensLimit,
+            resetAt: m.resetAt,
+            status: m.rateLimitStatus,
+            errorCount: m.errorCount,
+            successCount: m.successCount,
+            totalResponseTime: m.totalResponseTime,
+            dataSource: m.dataSource
+          }))
+        },
+        {
+          provider: 'groq',
+          models: ModelRegistry.groq.models.map(m => ({
+            id: m.id,
+            displayName: m.displayName,
+            requestsRemaining: m.requestsRemaining,
+            requestsLimit: m.requestsLimit,
+            tokensRemaining: m.tokensRemaining,
+            tokensLimit: m.tokensLimit,
+            resetAt: m.resetAt,
+            status: m.rateLimitStatus,
+            errorCount: m.errorCount,
+            successCount: m.successCount,
+            totalResponseTime: m.totalResponseTime,
+            dataSource: m.dataSource
+          }))
+        }
+      ]
     };
   },
 

@@ -40,6 +40,9 @@ const DOM = {
   opacitySlider: $('#opacity-slider'),
   btnHide:       $('#btn-hide'),
   btnClose:      $('#btn-close'),
+
+  // Rate Limits
+  rateLimitsContainer: $('#rate-limits-container'),
 };
 
 // ─── Application State ────────────────────────────────────────────
@@ -1083,6 +1086,162 @@ function convertToCustomSelect(selectElement) {
 }
 
 // ═══════════════════════════════════════════════════════════════════
+//  API RATE LIMITS & SMART RECOMMENDATIONS
+// ═══════════════════════════════════════════════════════════════════
+
+let rateLimitsData = null;
+
+async function refreshRateLimits() {
+  if (window.stealthAPI && window.stealthAPI.getRateLimits) {
+    rateLimitsData = await window.stealthAPI.getRateLimits();
+    renderRateLimitsDashboard(rateLimitsData);
+    updateModelDropdownsWithLimits();
+  }
+}
+
+function renderRateLimitsDashboard(data) {
+  if (!DOM.rateLimitsContainer) return;
+  DOM.rateLimitsContainer.innerHTML = '';
+  
+  if (!data || !data.providers) return;
+  
+  data.providers.forEach(prov => {
+    const section = document.createElement('div');
+    section.className = 'provider-section';
+    
+    const title = document.createElement('div');
+    title.className = 'provider-title';
+    title.textContent = prov.provider;
+    section.appendChild(title);
+    
+    prov.models.forEach(model => {
+      const card = document.createElement('div');
+      card.className = 'model-limit-card';
+      
+      const header = document.createElement('div');
+      header.className = 'model-limit-header';
+      
+      const name = document.createElement('span');
+      name.className = 'model-name';
+      name.textContent = model.displayName;
+      
+      const badge = document.createElement('span');
+      badge.className = `source-badge ${model.dataSource === 'Tracked' ? 'tracked' : 'provider'}`;
+      badge.textContent = model.dataSource === 'Tracked' ? 'App Tracked' : 'Provider Reported';
+      
+      header.appendChild(name);
+      header.appendChild(badge);
+      card.appendChild(header);
+      
+      if (model.requestsLimit !== null && model.requestsRemaining !== null) {
+        card.appendChild(createProgressBar('RPM Remaining', model.requestsRemaining, model.requestsLimit));
+      }
+      if (model.tokensLimit !== null && model.tokensRemaining !== null) {
+        card.appendChild(createProgressBar('TPM Remaining', model.tokensRemaining, model.tokensLimit));
+      }
+      
+      if (model.resetAt) {
+        const resetDiv = document.createElement('div');
+        resetDiv.className = 'reset-time';
+        const diffMs = new Date(model.resetAt).getTime() - Date.now();
+        if (diffMs > 0) {
+          const m = Math.floor(diffMs / 60000);
+          const s = Math.floor((diffMs % 60000) / 1000);
+          resetDiv.textContent = `Reset In: ${m}m ${s}s`;
+        } else {
+          resetDiv.textContent = `Reset In: 0m 0s`;
+        }
+        card.appendChild(resetDiv);
+      }
+      
+      section.appendChild(card);
+    });
+    
+    DOM.rateLimitsContainer.appendChild(section);
+  });
+}
+
+function createProgressBar(label, remaining, limit) {
+  const row = document.createElement('div');
+  row.className = 'limit-row';
+  
+  const pct = Math.max(0, Math.min(100, (remaining / limit) * 100));
+  let statusClass = 'healthy';
+  if (pct <= 20) statusClass = 'exhausted';
+  else if (pct <= 50) statusClass = 'warning';
+
+  const formatNumber = (num) => new Intl.NumberFormat('en-US').format(num);
+
+  const labelDiv = document.createElement('div');
+  labelDiv.className = 'limit-label';
+  labelDiv.innerHTML = `<span>${label}: ${formatNumber(remaining)} / ${formatNumber(limit)}</span><span class="${statusClass}-text">${Math.round(pct)}%</span>`;
+  row.appendChild(labelDiv);
+  
+  const bg = document.createElement('div');
+  bg.className = 'progress-bar-bg';
+  
+  const fill = document.createElement('div');
+  fill.className = `progress-bar-fill ${statusClass}`;
+  fill.style.width = `${pct}%`;
+  
+  bg.appendChild(fill);
+  row.appendChild(bg);
+  
+  return row;
+}
+
+// Old function removed
+
+function updateModelDropdownsWithLimits() {
+  if (!rateLimitsData) return;
+  // This will hook into custom select logic if needed.
+  // We can rebuild the standard select options based on smart recommendations.
+  
+  const groqGroup = document.getElementById('groq-models');
+  const geminiGroup = document.getElementById('gemini-models');
+  
+  rateLimitsData.providers.forEach(prov => {
+    const group = prov.provider === 'groq' ? groqGroup : geminiGroup;
+    if (!group) return;
+    
+    // Sort logic (smart recommendations): highest percentage remaining
+    const sortedModels = [...prov.models].sort((a, b) => {
+      if (a.status === 'exhausted') return 1;
+      if (b.status === 'exhausted') return -1;
+      
+      const getScore = (m) => {
+        if (m.requestsRemaining === null || m.requestsLimit === null) return 100 - (m.errorCount * 10);
+        return ((m.requestsRemaining / m.requestsLimit) * 100) - (m.errorCount * 10);
+      };
+      
+      return getScore(b) - getScore(a);
+    });
+    
+    group.innerHTML = '';
+    sortedModels.forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m.id;
+      
+      let text = m.displayName;
+      if (m.requestsRemaining !== null) {
+        text += ` (${new Intl.NumberFormat('en-US').format(m.requestsRemaining)} RPM left)`;
+      } else if (m.status === 'exhausted') {
+        text += ` (Exhausted)`;
+      }
+      opt.textContent = text;
+      if (m.status === 'exhausted') {
+        opt.disabled = true;
+      }
+      group.appendChild(opt);
+    });
+  });
+  
+  // Refresh the custom select UI
+  const ev = new Event('change');
+  DOM.modelSelect.dispatchEvent(ev);
+}
+
+// ═══════════════════════════════════════════════════════════════════
 //  INITIALIZATION
 // ═══════════════════════════════════════════════════════════════════
 
@@ -1101,6 +1260,10 @@ function init() {
 
   // Focus chat input
   DOM.chatInput.focus();
+
+  // Initial Rate Limit poll & setup loop
+  refreshRateLimits();
+  setInterval(refreshRateLimits, 30000);
 }
 
 document.addEventListener('DOMContentLoaded', init);

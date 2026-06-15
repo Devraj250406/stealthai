@@ -42,6 +42,9 @@
     <button class="tab" data-tab="settings">
       <span class="tab-icon">⚙</span>Config
     </button>
+    <button class="tab" data-tab="rate-limits">
+      <span class="tab-icon">⚡</span>Limits
+    </button>
   </nav>
 
   <!-- ═══ Chat Panel ═══ -->
@@ -186,6 +189,19 @@
     <div class="settings-section">
       <label class="settings-label">Data</label>
       <button id="btn-clear-all" class="action-btn danger">Clear All Data &amp; History</button>
+    </div>
+  </section>
+
+  <!-- ═══ Rate Limits Panel ═══ -->
+  <section id="panel-rate-limits" class="panel">
+    <div class="panel-header">
+      <h3>API Rate Limits</h3>
+      <p class="hint">Real-time status of your API quotas.</p>
+    </div>
+    <div id="rate-limits-container">
+      <div class="empty-state">
+        <p>Loading rate limits...</p>
+      </div>
     </div>
   </section>
 

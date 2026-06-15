@@ -999,3 +999,114 @@ kbd {
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
 }
+
+/* ─── Rate Limits Panel ───────────────────────────────────────── */
+#rate-limits-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.provider-section {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+}
+
+.provider-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.model-limit-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin-bottom: 8px;
+}
+.model-limit-card:last-child {
+  margin-bottom: 0;
+}
+
+.model-limit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.model-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.status-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.status-badge.healthy { background: rgba(48, 209, 88, 0.15); color: #30d158; }
+.status-badge.warning { background: rgba(255, 159, 10, 0.15); color: #ff9f0a; }
+.status-badge.exhausted { background: rgba(255, 59, 48, 0.15); color: #ff3b30; }
+.status-badge.unknown { background: rgba(142, 142, 147, 0.15); color: #8e8e93; }
+
+.source-badge {
+  font-size: 9px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-left: auto;
+}
+
+.source-badge.provider { background: rgba(10, 132, 255, 0.15); color: #0a84ff; border: 1px solid rgba(10, 132, 255, 0.3); }
+.source-badge.tracked { background: rgba(191, 90, 242, 0.15); color: #bf5af2; border: 1px solid rgba(191, 90, 242, 0.3); }
+
+.limit-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.limit-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.progress-bar-bg {
+  height: 4px;
+  background: var(--surface-2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+.progress-bar-fill.healthy { background: #30d158; }
+.progress-bar-fill.warning { background: #ff9f0a; }
+.progress-bar-fill.exhausted { background: #ff3b30; }
+
+.reset-time {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  text-align: right;
+  margin-top: 4px;
+}
