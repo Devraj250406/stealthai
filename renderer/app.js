@@ -863,6 +863,98 @@ function initUI() {
     });
   }
 
+  // Auto-Capture Error Listener
+  if (window.stealthAPI && window.stealthAPI.onChatError) {
+    window.stealthAPI.onChatError((errorMsg) => {
+      renderMessage('system', errorMsg, false);
+      scrollToBottom();
+    });
+  }
+
+  // ChatGPT Webview Auto-Capture Listener (Cmd+Shift+Space)
+  if (window.stealthAPI && window.stealthAPI.onChatGPTCapture) {
+    window.stealthAPI.onChatGPTCapture((base64Image) => {
+      // Switch to ChatGPT tab
+      $$('.tab').forEach(t => t.classList.remove('active'));
+      $$('.panel').forEach(p => p.classList.remove('active'));
+      const cgptTab = document.querySelector('.tab[data-tab="chatgpt"]');
+      if (cgptTab) cgptTab.classList.add('active');
+      const cgptPanel = document.getElementById('panel-chatgpt');
+      if (cgptPanel) cgptPanel.classList.add('active');
+
+      const webview = document.getElementById('chatgpt-webview');
+      if (!webview) return;
+      
+      const code = `
+        (async function() {
+          try {
+            // Bypass CSP by constructing Blob directly from base64
+            const b64Data = "${base64Image}".split(',')[1];
+            const bstr = atob(b64Data);
+            let n = bstr.length;
+            const u8arr = new Uint8Array(n);
+            while(n--) { u8arr[n] = bstr.charCodeAt(n); }
+            const filename = "stealth_cap_" + Date.now() + ".png";
+            const file = new File([u8arr], filename, { type: "image/png" });
+            
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            
+            let uploadTriggered = false;
+
+            // Strategy 1: Find hidden file input and trigger change event
+            const fileInput = document.querySelector('input[type="file"]');
+            if (fileInput) {
+              fileInput.files = dataTransfer.files;
+              fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+              uploadTriggered = true;
+            }
+
+            // Strategy 2: Paste event on the prompt textarea/div (Only if Strategy 1 wasn't used)
+            const promptTextarea = document.getElementById('prompt-textarea') || document.querySelector('div[contenteditable="true"]');
+            if (promptTextarea && !uploadTriggered) {
+              promptTextarea.focus();
+              const pasteEvent = new ClipboardEvent('paste', {
+                clipboardData: dataTransfer,
+                bubbles: true,
+                cancelable: true
+              });
+              promptTextarea.dispatchEvent(pasteEvent);
+              uploadTriggered = true;
+            }
+            
+            if (uploadTriggered) {
+              // Inject text to guarantee the send button becomes active in React
+              if (promptTextarea) {
+                promptTextarea.focus();
+                document.execCommand('insertText', false, 'Solve this problem');
+              }
+
+              // Poll for the send button to become active (up to 10 seconds)
+              let attempts = 0;
+              const interval = setInterval(() => {
+                attempts++;
+                const sendButton = document.querySelector('button[data-testid="send-button"]');
+                
+                if (sendButton && !sendButton.disabled) {
+                  sendButton.click();
+                  clearInterval(interval);
+                } else if (attempts >= 20) {
+                  // Fallback after 10 seconds
+                  clearInterval(interval);
+                  if (promptTextarea) {
+                    promptTextarea.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', keyCode: 13, which: 13, bubbles: true }));
+                  }
+                }
+              }, 500);
+            }
+          } catch(e) { console.error("StealthAI Injection Error:", e); }
+        })();
+      `;
+      webview.executeJavaScript(code).catch(err => console.error("ExecuteJS Error:", err));
+    });
+  }
+
   // Auto-resize textarea
   DOM.chatInput.addEventListener('input', autoResizeInput);
 
@@ -1242,6 +1334,58 @@ function updateModelDropdownsWithLimits() {
 }
 
 // ═══════════════════════════════════════════════════════════════════
+//  CHATGPT WEBVIEW INTEGRATION
+// ═══════════════════════════════════════════════════════════════════
+
+function initChatGPT() {
+  const webview = document.getElementById('chatgpt-webview');
+  const btnBack = document.getElementById('btn-cgpt-back');
+  const btnForward = document.getElementById('btn-cgpt-forward');
+  const btnReload = document.getElementById('btn-cgpt-reload');
+  const loadingIndicator = document.getElementById('chatgpt-loading-indicator');
+  const errorScreen = document.getElementById('chatgpt-error-screen');
+  const btnOpenExternal = document.getElementById('btn-cgpt-open-external');
+
+  if (!webview) return;
+
+  // Navigation Buttons
+  btnBack.addEventListener('click', () => { if (webview.canGoBack()) webview.goBack(); });
+  btnForward.addEventListener('click', () => { if (webview.canGoForward()) webview.goForward(); });
+  btnReload.addEventListener('click', () => webview.reload());
+
+  // Loading States
+  webview.addEventListener('did-start-loading', () => {
+    loadingIndicator.style.display = 'inline-block';
+    errorScreen.style.display = 'none';
+  });
+  
+  webview.addEventListener('did-stop-loading', () => {
+    loadingIndicator.style.display = 'none';
+  });
+
+  webview.addEventListener('did-fail-load', (e) => {
+    // Ignore aborted loads (e.g. user stopped it or redirected quickly)
+    if (e.errorCode === -3) return; 
+    loadingIndicator.style.display = 'none';
+    errorScreen.style.display = 'flex';
+  });
+
+  // Handle external links fallback if not caught by setWindowOpenHandler
+  btnOpenExternal.addEventListener('click', () => {
+    if (window.stealthAPI && window.stealthAPI.openExternal) {
+      window.stealthAPI.openExternal('https://chatgpt.com');
+    }
+  });
+  
+  webview.addEventListener('new-window', (e) => {
+    e.preventDefault();
+    if (window.stealthAPI && window.stealthAPI.openExternal) {
+      window.stealthAPI.openExternal(e.url);
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════
 //  INITIALIZATION
 // ═══════════════════════════════════════════════════════════════════
 
@@ -1252,6 +1396,7 @@ function init() {
   initSettings();
   loadChatHistory();
   enumerateAudioDevices();
+  initChatGPT();
 
   // Convert all native selects to custom stealth selects
   document.querySelectorAll('select').forEach(select => {

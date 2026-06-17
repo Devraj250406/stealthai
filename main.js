@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, globalShortcut, desktopCapturer, screen } = require('electron');
+const { app, BrowserWindow, ipcMain, globalShortcut, desktopCapturer, screen, session, shell } = require('electron');
 const path = require('path');
 
 let mainWindow = null;
@@ -35,7 +35,8 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
-      sandbox: false
+      sandbox: false, // Must remain false because preload.js uses fs/path natively
+      webviewTag: true
     }
   });
 
@@ -110,19 +111,65 @@ function createWindow() {
   // ─── GLOBAL SHORTCUT: Silent Screenshot Capture (Shift+Space) ───────
   globalShortcut.register('Shift+Space', async () => {
     try {
-      // Capture primary screen silently
-      const sources = await desktopCapturer.getSources({ types: ['screen'], thumbnailSize: { width: 1920, height: 1080 } });
-      if (sources && sources.length > 0) {
-        // Find primary screen or just take the first one
-        const primarySource = sources[0]; 
-        const base64Image = primarySource.thumbnail.toDataURL(); // data:image/png;base64,...
-        
-        if (mainWindow) {
-          mainWindow.webContents.send('app:triggerAutoCapture', base64Image);
+      const fs = require('fs');
+      const { exec } = require('child_process');
+      const tmpPath = path.join(app.getPath('temp'), `stealth_cap_${Date.now()}.png`);
+      
+      // Use native macOS screencapture for primary display silently (-x) to a file (-m limits to main monitor)
+      exec(`screencapture -x -m "${tmpPath}"`, (error) => {
+        if (error) {
+          console.error('Screencapture failed:', error);
+          if (mainWindow) {
+            mainWindow.webContents.send('app:chatError', 'Screenshot failed. Please check macOS Screen Recording permissions in System Settings.');
+          }
+          return;
         }
-      }
+        
+        fs.readFile(tmpPath, (err, data) => {
+          if (!err && data) {
+            // Convert to base64 data URI format expected by renderer
+            const base64Image = `data:image/png;base64,${data.toString('base64')}`;
+            if (mainWindow) {
+              mainWindow.webContents.send('app:triggerAutoCapture', base64Image);
+            }
+            // Clean up temporary file immediately after sending
+            fs.unlink(tmpPath, () => {});
+          }
+        });
+      });
     } catch (e) {
       console.error('Silent capture failed:', e);
+    }
+  });
+
+  // ─── GLOBAL SHORTCUT: Capture and Send to ChatGPT Webview (Cmd+Shift+Space) 
+  globalShortcut.register('CommandOrControl+Shift+Space', async () => {
+    try {
+      const fs = require('fs');
+      const { exec } = require('child_process');
+      const tmpPath = path.join(app.getPath('temp'), `stealth_cgpt_cap_${Date.now()}.png`);
+      
+      exec(`screencapture -x -m "${tmpPath}"`, (error) => {
+        if (error) {
+          console.error('Screencapture failed:', error);
+          if (mainWindow) {
+            mainWindow.webContents.send('app:chatError', 'Screenshot failed. Please check macOS Screen Recording permissions in System Settings.');
+          }
+          return;
+        }
+        
+        fs.readFile(tmpPath, (err, data) => {
+          if (!err && data) {
+            const base64Image = `data:image/png;base64,${data.toString('base64')}`;
+            if (mainWindow) {
+              mainWindow.webContents.send('app:triggerChatGPTCapture', base64Image);
+            }
+            fs.unlink(tmpPath, () => {});
+          }
+        });
+      });
+    } catch (e) {
+      console.error('ChatGPT capture failed:', e);
     }
   });
 
@@ -131,7 +178,27 @@ function createWindow() {
   });
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  // Strip Electron from User-Agent to bypass ChatGPT anti-bot walls
+  session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+    let currentUserAgent = details.requestHeaders['User-Agent'] || '';
+    // Remove "Electron/XX.X.X" and "StealthAI/X.X.X"
+    details.requestHeaders['User-Agent'] = currentUserAgent.replace(/StealthAI\/[^\s]+/, '').replace(/Electron\/[^\s]+/, '').trim();
+    callback({ requestHeaders: details.requestHeaders });
+  });
+
+  // Handle external links for Webviews and Main Window
+  app.on('web-contents-created', (event, contents) => {
+    contents.setWindowOpenHandler(({ url }) => {
+      if (url.startsWith('http://') || url.startsWith('https://')) {
+        shell.openExternal(url);
+      }
+      return { action: 'deny' }; // Prevent new Electron windows
+    });
+  });
+
+  createWindow();
+});
 
 app.on('will-quit', () => {
   globalShortcut.unregisterAll();

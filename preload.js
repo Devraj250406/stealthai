@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer, shell } = require('electron');
 const { marked } = require('marked');
 const hljs = require('highlight.js');
 const fs = require('fs');
@@ -537,6 +537,12 @@ contextBridge.exposeInMainWorld('stealthAPI', {
     }
   },
 
+  openExternal: (url) => {
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      shell.openExternal(url);
+    }
+  },
+
   // ─── Model Registry Access ─────────────────────────────────────
   getModelRegistry: () => {
     return {
@@ -702,6 +708,8 @@ contextBridge.exposeInMainWorld('stealthAPI', {
   // ─── IPC Listeners ─────────────────────────────────────────────
   onClickThroughState: (callback) => ipcRenderer.on('app:clickThroughState', callback),
   onAutoCapture: (callback) => ipcRenderer.on('app:triggerAutoCapture', (event, base64Image) => callback(base64Image)),
+  onChatGPTCapture: (callback) => ipcRenderer.on('app:triggerChatGPTCapture', (event, base64Image) => callback(base64Image)),
+  onChatError: (callback) => ipcRenderer.on('app:chatError', (event, message) => callback(message)),
   onStealthMinimizeState: (callback) => ipcRenderer.on('app:stealthMinimizeState', callback),
 
   // ─── Markdown rendering ────────────────────────────────────────

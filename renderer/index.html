@@ -33,6 +33,9 @@
     <button class="tab active" data-tab="chat">
       <span class="tab-icon">◆</span>Chat
     </button>
+    <button class="tab" data-tab="chatgpt">
+      <span class="tab-icon">✧</span>ChatGPT
+    </button>
     <button class="tab" data-tab="transcript">
       <span class="tab-icon">●</span>Transcript
     </button>
@@ -76,6 +79,27 @@
         </label>
       </div>
     </div>
+  </section>
+
+  <!-- ═══ ChatGPT Panel ═══ -->
+  <section id="panel-chatgpt" class="panel">
+    <div id="chatgpt-toolbar">
+      <button class="browser-btn" id="btn-cgpt-back" title="Go Back">←</button>
+      <button class="browser-btn" id="btn-cgpt-forward" title="Go Forward">→</button>
+      <button class="browser-btn" id="btn-cgpt-reload" title="Reload">↻</button>
+      <span id="chatgpt-loading-indicator" style="display:none;">Loading...</span>
+    </div>
+    
+    <div id="chatgpt-error-screen" style="display: none;">
+      <div class="empty-state">
+        <div class="empty-icon">⚠</div>
+        <p>ChatGPT failed to load or blocked the connection.</p>
+        <button id="btn-cgpt-open-external" class="action-btn" style="margin-top: 15px;">Open in Browser ↗</button>
+      </div>
+    </div>
+
+    <!-- The webview uses the default partition for session persistence -->
+    <webview id="chatgpt-webview" src="https://chatgpt.com" allowpopups style="width: 100%; height: calc(100% - 32px); border: none; background: #fff;"></webview>
   </section>
 
   <!-- ═══ Transcript Panel ═══ -->
